@@ -4,8 +4,8 @@ import { OrthographicCamera, useFBO, Stats } from "@react-three/drei";
 import { EffectComposer } from "@react-three/postprocessing";
 import * as THREE from "three";
 
-import { RippleEffect } from "./Ripple";
-import OffScreenScene from "./OffScreenScene";
+import { RippleEffect } from "./ripple/effects/Ripple";
+import OffScreenScene from "./ripple/effects/OffScreenScene";
 
 const cameraZ = 1;
 let lastMousePosition = new THREE.Vector2();

@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect, useCallback, FC } from "react";
-import { Vector3 } from "three";
 import useR3FProperties from "../hooks/useR3FProperties";
 import * as THREE from "three";
 
@@ -22,7 +21,7 @@ const R3FGradientPlane: FC<GradientPlaneProps> = ({ targetSelector }) => {
     document.body.style.cursor = hovered ? "pointer" : "auto";
   }, [hovered]);
 
-  const OBC = useCallback((shader: THREE.Shader) => {
+  const OBC = useCallback((shader) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <dithering_fragment>",
       ` 
