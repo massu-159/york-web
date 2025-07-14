@@ -20,7 +20,6 @@ interface Props {
 function calculateOrthographicZoom(
   camera: THREE.OrthographicCamera,
   object: THREE.Object3D,
-  distance: number
 ): number {
   const boundingBox = zoomCalcBox3.setFromObject(object);
   const objectSize = boundingBox.getSize(vec3);
@@ -82,8 +81,8 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) 
       offScreen.current.material.uniforms.bufferTexture.value = textureA.texture;
 
       if (Math.round(clock.elapsedTime / 0.1) % 24.0 === 0) {
-        offScreen.current.material.uniforms.mouse.value.x = 0.5;
-        offScreen.current.material.uniforms.mouse.value.y = 0.5;
+        offScreen.current.material.uniforms.mouse.value.x = 0.6;
+        offScreen.current.material.uniforms.mouse.value.y = 0.6;
         offScreen.current.material.uniforms.mouse.value.z = 1.01;
         rippleShaderPassRef.current.uniforms.get("mouse").value.x = 0.5;
         rippleShaderPassRef.current.uniforms.get("mouse").value.y = 0.5;
@@ -128,7 +127,6 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) 
 
   return (
     <>
-      <Stats />
       <EffectComposer ref={composerRef} multisampling={8} depthBuffer={true}>
         <RippleEffect
           ref={rippleShaderPassRef}
@@ -147,7 +145,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) 
             makeDefault
             position={[0, 0, 2]}
             args={[-1, 1, 1, -1, 1, 10]}
-            aspect={size.width / size.height}
+            // aspect={size.width / size.height}
             ref={offScreenCameraRef}
             zoom={orthoZoom}
           />

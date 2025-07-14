@@ -27,7 +27,7 @@ class MyCustomEffectImpl extends Effect {
     crocTexture = null,
   }: RippleEffectProps = {}) {
     super("RippleEffect", onScreenFragmentShader, {
-      uniforms: new Map([
+      uniforms: new Map<string, Uniform<any>>([
         ["bufferTexture", new Uniform(bufferTexture)],
         ["res", new Uniform(res)],
         ["mouse", new Uniform(mouse)],
@@ -44,11 +44,17 @@ class MyCustomEffectImpl extends Effect {
   }
 
   update(renderer: THREE.WebGLRenderer, inputBuffer: THREE.WebGLRenderTarget, deltaTime: number) {
-    this.uniforms.get("bufferTexture").value = _bufferTexture;
-    this.uniforms.get("res").value = _res;
-    this.uniforms.get("mouse").value = _mouse;
-    this.uniforms.get("colorTexture").value = _colorTexture;
-    this.uniforms.get("crocTexture").value = _crocTexture;
+    const bufferTextureUniform = this.uniforms.get("bufferTexture");
+    const resUniform = this.uniforms.get("res");
+    const mouseUniform = this.uniforms.get("mouse");
+    const colorTextureUniform = this.uniforms.get("colorTexture");
+    const crocTextureUniform = this.uniforms.get("crocTexture");
+
+    if (bufferTextureUniform) bufferTextureUniform.value = _bufferTexture;
+    if (resUniform) resUniform.value = _res;
+    if (mouseUniform) mouseUniform.value = _mouse;
+    if (colorTextureUniform) colorTextureUniform.value = _colorTexture;
+    if (crocTextureUniform) crocTextureUniform.value = _crocTexture;
   }
 }
 
@@ -63,7 +69,7 @@ export const RippleEffect = forwardRef<Effect, RippleEffectProps>(
         crocTexture,
       });
     }, [bufferTexture, res, mouse, colorTexture, crocTexture]);
-    
+
     return <primitive ref={ref} object={effect} />;
   }
 );

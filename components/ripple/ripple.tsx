@@ -1,21 +1,26 @@
-import "./styles.css";
 import { Canvas } from "@react-three/fiber";
-import R3FCard from "./r3f-components/Card.tsx";
+import R3FCard from "./r3f-components/Card";
 import { CAMERA_Z_POSITION, PLACEHOLDER_IMAGE_URL } from "./constants/index";
 import EffectComposer from "./effects/EffectComposer";
 
 const HtmlCard = () => {
   return (
-    <div id="target-card" className="card hide">
-      <img id="target-image" className="image" src={PLACEHOLDER_IMAGE_URL} />
-      <p id="target-title" className="title">
-        R3F world from HTML
-      </p>
-      <p id="target-description" className="description">
-        This a description showcasing a shadow R3F world based on a HTML world.
-        Using a couple of hooks and event listeners.
-      </p>
-    </div>
+    <>
+      <img
+        id='target-image'
+        className='object-cover opacity-30'
+        src={PLACEHOLDER_IMAGE_URL}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          objectFit: "cover",
+          zIndex: 1,
+        }}
+      />
+    </>
   );
 };
 
@@ -42,7 +47,7 @@ const THREECanvas = () => {
       <EffectComposer />
       {/* <OrbitControls makeDefault /> */}
       <ambientLight />
-      {/* <color attach="background" args={["black"]} /> */}
+      <color attach='background' args={["white"]} />
     </Canvas>
   );
 };

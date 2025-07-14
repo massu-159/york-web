@@ -57,6 +57,6 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
   vec4 backgroundColor = texture(inputBuffer, uv);
 
-  outputColor = vec4(mix(c.rgb * max(diffuse, 1.f) + spec * uv.x, (vec3(0.0f, 0.0f, 0.0f)), 0.3f) * 0.1, 1.0f);
+  outputColor = vec4(mix(c.rgb * max(diffuse, 1.f) + spec * uv.x, (vec3(1.0f, 1.0f, 1.0f)), 0.3f) * 0.1, 1.0f);
 }
 `;
