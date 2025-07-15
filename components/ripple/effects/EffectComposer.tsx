@@ -1,7 +1,8 @@
 import { useRef, forwardRef, useState, useMemo, useEffect } from "react";
 import { useFrame, useThree, createPortal } from "@react-three/fiber";
 import { OrthographicCamera, useFBO, Stats } from "@react-three/drei";
-import { EffectComposer } from "@react-three/postprocessing";
+import { EffectComposer as EffectComposerType } from "@react-three/postprocessing";
+import { Effect } from "postprocessing";
 import * as THREE from "three";
 
 import { RippleEffect } from "./Ripple";
@@ -17,10 +18,7 @@ interface Props {
   [key: string]: any;
 }
 
-function calculateOrthographicZoom(
-  camera: THREE.OrthographicCamera,
-  object: THREE.Object3D,
-): number {
+function calculateOrthographicZoom(camera: THREE.OrthographicCamera, object: THREE.Object3D): number {
   const boundingBox = zoomCalcBox3.setFromObject(object);
   const objectSize = boundingBox.getSize(vec3);
 
@@ -33,10 +31,7 @@ function calculateOrthographicZoom(
   return Math.max(zoomX, zoomY);
 }
 
-function calculateDistanceToCamera(
-  camera: THREE.Camera,
-  object: THREE.Object3D
-): number {
+function calculateDistanceToCamera(camera: THREE.Camera, object: THREE.Object3D): number {
   const cameraPosition = vec3;
   const objectPosition = vec3;
 
@@ -46,18 +41,18 @@ function calculateDistanceToCamera(
   return cameraPosition.distanceTo(objectPosition);
 }
 
-export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) {
+export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVectors: any) {
   const { size, gl, set, scene } = useThree();
   const offScreen = useRef<THREE.Mesh>(null);
   const composerRef = useRef<any>(null);
-  const rippleShaderPassRef = useRef<any>(null);
+  const rippleShaderPassRef = useRef<Effect | null>(null);
 
   const [orthoZoom, setOrthoZoom] = useState<number>(1);
 
   const offScreenFBOTexture = useFBO(size.width, size.height);
   const onScreenFBOTexture = useFBO(size.width, size.height);
 
-  const [offScreenScene] = useState(() => new THREE.Scene());
+  const [offScreenScene] = useState<THREE.Scene>(() => new THREE.Scene());
   const offScreenCameraRef = useRef<THREE.OrthographicCamera>(null);
 
   let textureA = offScreenFBOTexture;
@@ -68,7 +63,9 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) 
   useFrame((state) => {
     const { gl, clock } = state;
     gl.setRenderTarget(textureB);
-    gl.render(offScreenScene, offScreenCameraRef.current!);
+    if (offScreenCameraRef.current) {
+      gl.render(offScreenScene, offScreenCameraRef.current);
+    }
 
     //Swap textureA and B
     const t = textureA;
@@ -76,50 +73,59 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) 
     textureB = t;
 
     if (rippleShaderPassRef.current && offScreen.current) {
-      rippleShaderPassRef.current.uniforms.get("bufferTexture").value =
-        textureB.texture;
-      offScreen.current.material.uniforms.bufferTexture.value = textureA.texture;
-
-      if (Math.round(clock.elapsedTime / 0.1) % 24.0 === 0) {
-        offScreen.current.material.uniforms.mouse.value.x = 0.6;
-        offScreen.current.material.uniforms.mouse.value.y = 0.6;
-        offScreen.current.material.uniforms.mouse.value.z = 1.01;
-        rippleShaderPassRef.current.uniforms.get("mouse").value.x = 0.5;
-        rippleShaderPassRef.current.uniforms.get("mouse").value.y = 0.5;
-        rippleShaderPassRef.current.uniforms.get("mouse").value.z = 1.01;
-      } else {
-        offScreen.current.material.uniforms.mouse.value.x = 0.5;
-        offScreen.current.material.uniforms.mouse.value.y = 0.5;
-        offScreen.current.material.uniforms.mouse.value.z = 0.0;
-        rippleShaderPassRef.current.uniforms.get("mouse").value.x = 0.5;
-        rippleShaderPassRef.current.uniforms.get("mouse").value.y = 0.5;
-        rippleShaderPassRef.current.uniforms.get("mouse").value.z = 1.01;
+      const rippleUniforms = rippleShaderPassRef.current.uniforms;
+      const offScreenMaterial = offScreen.current.material as THREE.ShaderMaterial;
+      if (rippleUniforms && rippleUniforms.get("bufferTexture")) {
+        rippleUniforms.get("bufferTexture")!.value = textureB.texture;
+      }
+      if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.bufferTexture) {
+        offScreenMaterial.uniforms.bufferTexture.value = textureA.texture;
       }
 
-      offScreen.current.material.uniforms.time.value = clock.elapsedTime;
-      offScreen.current.material.uniforms.res.value = res;
+      if (Math.round(clock.elapsedTime / 0.1) % 24.0 === 0) {
+        if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.mouse) {
+          offScreenMaterial.uniforms.mouse.value.x = 0.6;
+          offScreenMaterial.uniforms.mouse.value.y = 0.6;
+          offScreenMaterial.uniforms.mouse.value.z = 1.01;
+        }
+        if (rippleUniforms && rippleUniforms.get("mouse")) {
+          rippleUniforms.get("mouse")!.value.x = 0.5;
+          rippleUniforms.get("mouse")!.value.y = 0.5;
+          rippleUniforms.get("mouse")!.value.z = 1.01;
+        }
+      } else {
+        if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.mouse) {
+          offScreenMaterial.uniforms.mouse.value.x = 0.5;
+          offScreenMaterial.uniforms.mouse.value.y = 0.5;
+          offScreenMaterial.uniforms.mouse.value.z = 0.0;
+        }
+        if (rippleUniforms && rippleUniforms.get("mouse")) {
+          rippleUniforms.get("mouse")!.value.x = 0.5;
+          rippleUniforms.get("mouse")!.value.y = 0.5;
+          rippleUniforms.get("mouse")!.value.z = 1.01;
+        }
+      }
+      if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.time) {
+        offScreenMaterial.uniforms.time.value = clock.elapsedTime;
+      }
+      if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.res) {
+        offScreenMaterial.uniforms.res.value = res;
+      }
     }
 
     gl.setRenderTarget(null);
-    composerRef.current?.render();
+    if (composerRef.current) {
+      composerRef.current.render();
+    }
   });
 
   useEffect(() => {
     if (offScreenCameraRef.current && offScreen.current) {
-      const zoom = calculateOrthographicZoom(
-        offScreenCameraRef.current,
-        offScreen.current,
-        calculateDistanceToCamera(offScreenCameraRef.current, offScreen.current)
-      );
+      const zoom = calculateOrthographicZoom(offScreenCameraRef.current, offScreen.current);
 
       setOrthoZoom(zoom);
 
-      const camera = new THREE.PerspectiveCamera(
-        50,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-      );
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
       camera.position.set(0, 0, cameraZ);
       set({ camera });
     }
@@ -127,20 +133,17 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props, crocVectors) 
 
   return (
     <>
-      <EffectComposer ref={composerRef} multisampling={8} depthBuffer={true}>
+      <EffectComposerType ref={composerRef} multisampling={8} depthBuffer={true}>
         <RippleEffect
           ref={rippleShaderPassRef}
           bufferTexture={onScreenFBOTexture.texture}
           res={new THREE.Vector2(size.width, size.height)}
           mouse={mouseCenter}
         />
-      </EffectComposer>
+      </EffectComposerType>
       {createPortal(
         <>
-          <OffScreenScene
-            ref={offScreen}
-            bufferTexture={offScreenFBOTexture.texture}
-          />
+          <OffScreenScene ref={offScreen} bufferTexture={offScreenFBOTexture.texture} />
           <OrthographicCamera
             makeDefault
             position={[0, 0, 2]}

@@ -21,7 +21,7 @@ const R3FGradientPlane: FC<GradientPlaneProps> = ({ targetSelector }) => {
     document.body.style.cursor = hovered ? "pointer" : "auto";
   }, [hovered]);
 
-  const OBC = useCallback((shader) => {
+  const OBC = useCallback((shader: any) => {
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <dithering_fragment>",
       ` 
