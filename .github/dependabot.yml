@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "massu-159"
+    assignees:
+      - "massu-159"
+    commit-message:
+      prefix: "[deps]"
+      include: "scope"
+    target-branch: "main"
+    labels:
+      - "dependencies"
+      - "automated"
+    ignore:
+      - dependency-name: "@types/*"
+        update-types: ["version-update:semver-patch"]
+      - dependency-name: "eslint*"
+        update-types: ["version-update:semver-major"]
