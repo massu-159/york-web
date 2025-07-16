@@ -25,8 +25,8 @@ export function Hero() {
         </div>
       </div>
       <div className='relative z-20 max-w-3xl mx-auto ml-4 md:ml-20'>
-        <h2 className='text-2xl mb-4' aria-level="2">Creative Web Solutions</h2>
-        <h1 className='text-5xl font-bold pb-2 mb-6 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-500 text-transparent bg-clip-text' aria-level="1">
+        <h2 className='text-2xl mb-4' aria-level={2}>Creative Web Solutions</h2>
+        <h1 className='text-5xl font-bold pb-2 mb-6 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-500 text-transparent bg-clip-text' aria-level={1}>
           Bringing Your Vision to Life
         </h1>
         <p className='text-muted-foreground mb-8 max-w-2xl'>
