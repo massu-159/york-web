@@ -10,8 +10,8 @@ interface UseFocusManagementOptions {
 
 export function useFocusManagement(options: UseFocusManagementOptions = {}) {
   const { autoFocus = false, restoreFocus = true, trapFocus = false } = options;
-  const elementRef = useRef<HTMLElement>(null);
-  const previouslyFocusedElement = useRef<HTMLElement | null>(null);
+  const elementRef = useRef<HTMLFormElement>(null);
+  const previouslyFocusedElement = useRef<HTMLFormElement | null>(null);
 
   const focusFirst = useCallback(() => {
     if (!elementRef.current) return;
@@ -53,7 +53,7 @@ export function useFocusManagement(options: UseFocusManagementOptions = {}) {
 
   useEffect(() => {
     if (autoFocus) {
-      previouslyFocusedElement.current = document.activeElement as HTMLElement;
+      previouslyFocusedElement.current = document.activeElement as HTMLFormElement;
       focusFirst();
     }
 
