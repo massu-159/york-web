@@ -1,12 +1,13 @@
-import { useRef, forwardRef, useState, useMemo, useEffect } from "react";
-import { useFrame, useThree, createPortal } from "@react-three/fiber";
-import { OrthographicCamera, useFBO, Stats } from "@react-three/drei";
-import { EffectComposer } from "@react-three/postprocessing";
-import { Effect } from "postprocessing";
-import * as THREE from "three";
+import { OrthographicCamera, Stats, useFBO } from '@react-three/drei';
+import { createPortal, useFrame, useThree } from '@react-three/fiber';
+import { EffectComposer } from '@react-three/postprocessing';
+import { Effect } from 'postprocessing';
+import * as THREE from 'three';
 
-import { RippleEffect } from "./ripple/effects/Ripple";
-import OffScreenScene from "./ripple/effects/OffScreenScene";
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+
+import OffScreenScene from './ripple/effects/OffScreenScene';
+import { RippleEffect } from './ripple/effects/Ripple';
 
 const cameraZ = 1;
 const vec3 = new THREE.Vector3();
@@ -53,7 +54,10 @@ function calculateDistanceToCamera(camera: Camera, object: Object3D): number {
   return distance;
 }
 
-export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props, crocVectors: any) {
+export default forwardRef<THREE.Mesh, Props>(function Plane(
+  { ...props }: Props,
+  crocVectors: any,
+) {
   const { size, gl, set, scene } = useThree();
   const offScreen = useRef<THREE.Mesh>(null);
   const composerRef = useRef<any>(null);
@@ -74,7 +78,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props,
   res.x = size.width;
   res.y = size.height;
 
-  useFrame((state) => {
+  useFrame(state => {
     const { gl, clock, pointer } = state;
     gl.setRenderTarget(textureB);
     if (offScreenCameraRef.current) {
@@ -88,38 +92,51 @@ export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props,
 
     if (rippleShaderPassRef.current && offScreen.current) {
       const rippleUniforms = rippleShaderPassRef.current.uniforms;
-      const offScreenMaterial = offScreen.current.material as THREE.ShaderMaterial;
+      const offScreenMaterial = offScreen.current
+        .material as THREE.ShaderMaterial;
 
-      if (rippleUniforms && rippleUniforms.get("bufferTexture")) {
-        rippleUniforms.get("bufferTexture")!.value = textureB.texture;
+      if (rippleUniforms && rippleUniforms.get('bufferTexture')) {
+        rippleUniforms.get('bufferTexture')!.value = textureB.texture;
       }
-      if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.bufferTexture) {
+      if (
+        offScreenMaterial &&
+        offScreenMaterial.uniforms &&
+        offScreenMaterial.uniforms.bufferTexture
+      ) {
         offScreenMaterial.uniforms.bufferTexture.value = textureA.texture;
       }
 
       if (rippleShaderPassRef.current) {
         console.log({ test: Math.round(clock.elapsedTime) % 4 });
         if (Math.round(clock.elapsedTime / 0.1) % 24.0 === 0) {
-          if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.mouse) {
+          if (
+            offScreenMaterial &&
+            offScreenMaterial.uniforms &&
+            offScreenMaterial.uniforms.mouse
+          ) {
             offScreenMaterial.uniforms.mouse.value.x = 0.5;
             offScreenMaterial.uniforms.mouse.value.y = 0.5;
             offScreenMaterial.uniforms.mouse.value.z = 1.01;
           }
-          if (rippleUniforms && rippleUniforms.get("mouse")) {
-            rippleUniforms.get("mouse")!.value.x = 0.5;
-            rippleUniforms.get("mouse")!.value.y = 0.5;
-            rippleUniforms.get("mouse")!.value.z = 1.01;
+          if (rippleUniforms && rippleUniforms.get('mouse')) {
+            rippleUniforms.get('mouse')!.value.x = 0.5;
+            rippleUniforms.get('mouse')!.value.y = 0.5;
+            rippleUniforms.get('mouse')!.value.z = 1.01;
           }
         } else {
-          if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.mouse) {
+          if (
+            offScreenMaterial &&
+            offScreenMaterial.uniforms &&
+            offScreenMaterial.uniforms.mouse
+          ) {
             offScreenMaterial.uniforms.mouse.value.x = 0.5;
             offScreenMaterial.uniforms.mouse.value.y = 0.5;
             offScreenMaterial.uniforms.mouse.value.z = 0.0;
           }
-          if (rippleUniforms && rippleUniforms.get("mouse")) {
-            rippleUniforms.get("mouse")!.value.x = 0.5;
-            rippleUniforms.get("mouse")!.value.y = 0.5;
-            rippleUniforms.get("mouse")!.value.z = 1.01;
+          if (rippleUniforms && rippleUniforms.get('mouse')) {
+            rippleUniforms.get('mouse')!.value.x = 0.5;
+            rippleUniforms.get('mouse')!.value.y = 0.5;
+            rippleUniforms.get('mouse')!.value.z = 1.01;
           }
           // rippleShaderPassRef.current.uniforms.get('mouse').value.x = 0.5
           // rippleShaderPassRef.current.uniforms.get('mouse').value.y = 0.5
@@ -127,10 +144,18 @@ export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props,
         }
       }
 
-      if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.time) {
+      if (
+        offScreenMaterial &&
+        offScreenMaterial.uniforms &&
+        offScreenMaterial.uniforms.time
+      ) {
         offScreenMaterial.uniforms.time.value = clock.elapsedTime;
       }
-      if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.res) {
+      if (
+        offScreenMaterial &&
+        offScreenMaterial.uniforms &&
+        offScreenMaterial.uniforms.res
+      ) {
         offScreenMaterial.uniforms.res.value = res;
       }
     }
@@ -143,11 +168,19 @@ export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props,
 
   useEffect(() => {
     if (offScreenCameraRef.current && offScreen.current) {
-      const zoom = calculateOrthographicZoom(offScreenCameraRef.current, offScreen.current);
+      const zoom = calculateOrthographicZoom(
+        offScreenCameraRef.current,
+        offScreen.current,
+      );
 
       setOrthoZoom(zoom);
 
-      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const camera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      );
       camera.position.set(0, 0, cameraZ);
       set({ camera: camera });
     }
@@ -166,7 +199,10 @@ export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props,
       </EffectComposer>
       {createPortal(
         <>
-          <OffScreenScene ref={offScreen} bufferTexture={offScreenFBOTexture.texture} />
+          <OffScreenScene
+            ref={offScreen}
+            bufferTexture={offScreenFBOTexture.texture}
+          />
 
           <OrthographicCamera
             makeDefault
@@ -176,7 +212,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane({ ...props }: Props,
             zoom={orthoZoom}
           />
         </>,
-        offScreenScene
+        offScreenScene,
       )}
     </>
   );

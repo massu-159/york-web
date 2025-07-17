@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 interface R3FProperties {
   width: number;
@@ -10,7 +10,10 @@ interface R3FProperties {
 
 const vector = new THREE.Vector3();
 
-const create3DData = (element: HTMLElement | null, camera: THREE.Camera): R3FProperties => {
+const create3DData = (
+  element: HTMLElement | null,
+  camera: THREE.Camera,
+): R3FProperties => {
   if (!element) {
     return {
       width: 0,
@@ -38,8 +41,8 @@ const create3DData = (element: HTMLElement | null, camera: THREE.Camera): R3FPro
   const yCenter = (top + bottom) / 2;
 
   // ビューポート座標系に変換（スクロール位置を考慮）
-  const viewportX = (xCenter) / window.innerWidth;
-  const viewportY = (yCenter) / window.innerHeight;
+  const viewportX = xCenter / window.innerWidth;
+  const viewportY = yCenter / window.innerHeight;
 
   vector.x = viewportX * 2 - 1;
   vector.y = -viewportY * 2 + 1;
@@ -54,7 +57,10 @@ const create3DData = (element: HTMLElement | null, camera: THREE.Camera): R3FPro
   const distancePlane = camera.position.z;
   const perspectiveCamera = camera as THREE.PerspectiveCamera;
   const widthPlane =
-    (width / window.innerWidth) * distancePlane * 2 * Math.tan((perspectiveCamera.fov * Math.PI) / 360);
+    (width / window.innerWidth) *
+    distancePlane *
+    2 *
+    Math.tan((perspectiveCamera.fov * Math.PI) / 360);
 
   const heightPlane = widthPlane * (height / width) || 0;
 

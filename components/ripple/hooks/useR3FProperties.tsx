@@ -1,8 +1,10 @@
-import { useCallback, useLayoutEffect, useMemo, MutableRefObject } from "react";
-import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
-import createR3FProperties from "./createR3FProperties";
-import { PIXEL_TO_MAXWIDTH_FACTOR } from "../constants";
+import { useThree } from '@react-three/fiber';
+import * as THREE from 'three';
+
+import { MutableRefObject, useCallback, useLayoutEffect, useMemo } from 'react';
+
+import { PIXEL_TO_MAXWIDTH_FACTOR } from '../constants';
+import createR3FProperties from './createR3FProperties';
 
 interface UseR3FPropertiesProps {
   selector: string;
@@ -25,7 +27,7 @@ interface R3FProperties {
 const useR3FProperties = ({
   selector,
   ref,
-  geometry = "PlaneGeometry",
+  geometry = 'PlaneGeometry',
   centered = false,
   right = false,
   updateViaListener = true,
@@ -38,12 +40,16 @@ const useR3FProperties = ({
 
   const { width, height, position, widthInPixels } = useMemo(
     () => createR3FProperties(element, camera),
-    [element, camera]
+    [element, camera],
   );
 
   const createR3FPropertiesCallback = useCallback(() => {
     const elementCB = document.getElementById(
-      window.innerWidth < 1024 && geometry === "Text" && mobileAndDesktopLayoutDiffer ? `${selector}-mobile` : selector
+      window.innerWidth < 1024 &&
+        geometry === 'Text' &&
+        mobileAndDesktopLayoutDiffer
+        ? `${selector}-mobile`
+        : selector,
     );
     const {
       width: planeWidthCB,
@@ -54,23 +60,27 @@ const useR3FProperties = ({
     } = createR3FProperties(elementCB, camera);
 
     if (ref.current && updateViaListener) {
-      if (geometry !== "Text") {
+      if (geometry !== 'Text') {
         ref.current.position.x = planePos.x;
         ref.current.position.y = planePos.y;
-        ref.current.position.z = decreaseZFighting ? planePos.z - 0.001 : planePos.z;
+        ref.current.position.z = decreaseZFighting
+          ? planePos.z - 0.001
+          : planePos.z;
 
         const geom = new THREE.PlaneGeometry(
           (planeWidthCB * window.innerWidth) / window.innerHeight,
           (planeHeightCB * window.innerWidth) / window.innerHeight,
           20,
-          20
+          20,
         );
         ref.current.geometry = geom;
       } else {
         if (centered) {
           ref.current.position.x = planePos.x;
           ref.current.position.y = planePos.y;
-          ref.current.position.z = decreaseZFighting ? planePos.z - 0.001 : planePos.z;
+          ref.current.position.z = decreaseZFighting
+            ? planePos.z - 0.001
+            : planePos.z;
         } else if (right) {
           const w = (planeWidthCB * window.innerWidth) / window.innerHeight;
           const h = (planeHeightCB * window.innerWidth) / window.innerHeight;
@@ -106,13 +116,13 @@ const useR3FProperties = ({
   ]);
 
   const setUpEventListeners = useCallback(() => {
-    window.addEventListener("scroll", createR3FPropertiesCallback);
-    window.addEventListener("resize", createR3FPropertiesCallback);
+    window.addEventListener('scroll', createR3FPropertiesCallback);
+    window.addEventListener('resize', createR3FPropertiesCallback);
   }, [createR3FPropertiesCallback]);
 
   const removeEventListeners = useCallback(() => {
-    window.removeEventListener("scroll", createR3FPropertiesCallback);
-    window.removeEventListener("resize", createR3FPropertiesCallback);
+    window.removeEventListener('scroll', createR3FPropertiesCallback);
+    window.removeEventListener('resize', createR3FPropertiesCallback);
   }, [createR3FPropertiesCallback]);
 
   useLayoutEffect(() => {

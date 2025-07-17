@@ -77,13 +77,13 @@ const config: Config = {
         ripple: {
           '0%': { transform: 'scale(0)', opacity: '0.8' },
           '100%': { transform: 'scale(4)', opacity: '0' },
-        }
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'rotate-y': 'rotateY 0.5s ease-in-out forwards',
-        'ripple': 'ripple 10s linear infinite',
+        ripple: 'ripple 10s linear infinite',
       },
       scale: {
         '120': '1.2',

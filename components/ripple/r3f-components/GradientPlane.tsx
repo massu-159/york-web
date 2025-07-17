@@ -1,6 +1,8 @@
-import { useRef, useState, useEffect, useCallback, FC } from "react";
-import useR3FProperties from "../hooks/useR3FProperties";
-import * as THREE from "three";
+import * as THREE from 'three';
+
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+
+import useR3FProperties from '../hooks/useR3FProperties';
 
 interface GradientPlaneProps {
   targetSelector: string;
@@ -13,17 +15,17 @@ const R3FGradientPlane: FC<GradientPlaneProps> = ({ targetSelector }) => {
   const { position, width, height } = useR3FProperties({
     selector: targetSelector,
     ref: gradientPlaneRef,
-    geometry: "PlaneGeometry",
-    decreaseZFighting: true
+    geometry: 'PlaneGeometry',
+    decreaseZFighting: true,
   });
 
   useEffect(() => {
-    document.body.style.cursor = hovered ? "pointer" : "auto";
+    document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
 
   const OBC = useCallback((shader: any) => {
     shader.fragmentShader = shader.fragmentShader.replace(
-      "#include <dithering_fragment>",
+      '#include <dithering_fragment>',
       ` 
         #include <dithering_fragment>
 
@@ -36,7 +38,7 @@ const R3FGradientPlane: FC<GradientPlaneProps> = ({ targetSelector }) => {
         if (vUv.x < 0.02 || vUv.x > 0.98 || vUv.y < 0.02 || vUv.y > 0.985) {
           gl_FragColor.rgb = vec3(0.125, 0.157, 0.188);
         }
-        `
+        `,
     );
     return shader;
   }, []);
@@ -49,7 +51,7 @@ const R3FGradientPlane: FC<GradientPlaneProps> = ({ targetSelector }) => {
       onPointerOut={() => setHovered(false)}
     >
       <planeGeometry args={[width, height]} />
-      <meshBasicMaterial defines={{ USE_UV: "" }} onBeforeCompile={OBC} />
+      <meshBasicMaterial defines={{ USE_UV: '' }} onBeforeCompile={OBC} />
     </mesh>
   );
 };

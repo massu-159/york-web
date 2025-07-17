@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface UseKeyboardNavigationOptions {
   onEscape?: () => void;
@@ -13,7 +13,9 @@ interface UseKeyboardNavigationOptions {
   onShiftTab?: () => void;
 }
 
-export function useKeyboardNavigation(options: UseKeyboardNavigationOptions = {}) {
+export function useKeyboardNavigation(
+  options: UseKeyboardNavigationOptions = {},
+) {
   const {
     onEscape,
     onEnter,
@@ -22,40 +24,52 @@ export function useKeyboardNavigation(options: UseKeyboardNavigationOptions = {}
     onArrowLeft,
     onArrowRight,
     onTab,
-    onShiftTab
+    onShiftTab,
   } = options;
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    switch (event.key) {
-      case 'Escape':
-        onEscape?.();
-        break;
-      case 'Enter':
-        onEnter?.();
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        onArrowUp?.();
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        onArrowDown?.();
-        break;
-      case 'ArrowLeft':
-        onArrowLeft?.();
-        break;
-      case 'ArrowRight':
-        onArrowRight?.();
-        break;
-      case 'Tab':
-        if (event.shiftKey) {
-          onShiftTab?.();
-        } else {
-          onTab?.();
-        }
-        break;
-    }
-  }, [onEscape, onEnter, onArrowUp, onArrowDown, onArrowLeft, onArrowRight, onTab, onShiftTab]);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      switch (event.key) {
+        case 'Escape':
+          onEscape?.();
+          break;
+        case 'Enter':
+          onEnter?.();
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          onArrowUp?.();
+          break;
+        case 'ArrowDown':
+          event.preventDefault();
+          onArrowDown?.();
+          break;
+        case 'ArrowLeft':
+          onArrowLeft?.();
+          break;
+        case 'ArrowRight':
+          onArrowRight?.();
+          break;
+        case 'Tab':
+          if (event.shiftKey) {
+            onShiftTab?.();
+          } else {
+            onTab?.();
+          }
+          break;
+      }
+    },
+    [
+      onEscape,
+      onEnter,
+      onArrowUp,
+      onArrowDown,
+      onArrowLeft,
+      onArrowRight,
+      onTab,
+      onShiftTab,
+    ],
+  );
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -69,11 +83,13 @@ export function useKeyboardNavigation(options: UseKeyboardNavigationOptions = {}
 
 export function trapFocus(element: HTMLElement) {
   const focusableElements = element.querySelectorAll(
-    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select',
   );
-  
+
   const firstElement = focusableElements[0] as HTMLElement;
-  const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+  const lastElement = focusableElements[
+    focusableElements.length - 1
+  ] as HTMLElement;
 
   const handleTabKeyPress = (event: KeyboardEvent) => {
     if (event.key === 'Tab') {
@@ -92,7 +108,7 @@ export function trapFocus(element: HTMLElement) {
   };
 
   element.addEventListener('keydown', handleTabKeyPress);
-  
+
   return () => {
     element.removeEventListener('keydown', handleTabKeyPress);
   };
