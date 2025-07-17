@@ -44,7 +44,7 @@
     "tailwindcss": "^4.1.11",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.178.0",
-    "typescript": "5.7",
+    "typescript": "5.8",
     "zod": "^3.23.8"
   },
   "devDependencies": {
