@@ -1,8 +1,8 @@
-const nextJest = require('next/jest')
+const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
   dir: './',
-})
+});
 
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -12,7 +12,7 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   testMatch: [
     '**/__tests__/**/*.(js|jsx|ts|tsx)',
-    '**/*.(test|spec).(js|jsx|ts|tsx)'
+    '**/*.(test|spec).(js|jsx|ts|tsx)',
   ],
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
@@ -24,6 +24,6 @@ const customJestConfig = {
     '!jest.setup.js',
   ],
   setupFiles: ['<rootDir>/jest.polyfills.js'],
-}
+};
 
-module.exports = createJestConfig(customJestConfig)
+module.exports = createJestConfig(customJestConfig);

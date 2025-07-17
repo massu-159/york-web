@@ -4,13 +4,13 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), 
-    removeListener: jest.fn(), 
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-})
+});
 
 // Mock localStorage
 const localStorageMock = {
@@ -18,5 +18,5 @@ const localStorageMock = {
   setItem: jest.fn(),
   removeItem: jest.fn(),
   clear: jest.fn(),
-}
-global.localStorage = localStorageMock
+};
+global.localStorage = localStorageMock;

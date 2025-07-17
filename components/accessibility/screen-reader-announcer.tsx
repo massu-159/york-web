@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect } from 'react';
 
@@ -8,10 +8,10 @@ interface ScreenReaderAnnouncerProps {
   clearAfter?: number;
 }
 
-export function ScreenReaderAnnouncer({ 
-  message, 
-  priority = 'polite', 
-  clearAfter = 3000 
+export function ScreenReaderAnnouncer({
+  message,
+  priority = 'polite',
+  clearAfter = 3000,
 }: ScreenReaderAnnouncerProps) {
   useEffect(() => {
     if (!message) return;
@@ -33,14 +33,14 @@ export function ScreenReaderAnnouncer({
 }
 
 export function announceToScreenReader(
-  message: string, 
-  priority: 'polite' | 'assertive' = 'polite'
+  message: string,
+  priority: 'polite' | 'assertive' = 'polite',
 ) {
   const announcer = document.getElementById('announcements');
   if (announcer) {
     announcer.setAttribute('aria-live', priority);
     announcer.textContent = message;
-    
+
     setTimeout(() => {
       announcer.textContent = '';
     }, 3000);

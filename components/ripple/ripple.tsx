@@ -1,7 +1,8 @@
-import { Canvas } from "@react-three/fiber";
-import R3FCard from "./r3f-components/Card";
-import { CAMERA_Z_POSITION, PLACEHOLDER_IMAGE_URL } from "./constants/index";
-import EffectComposer from "./effects/EffectComposer";
+import { Canvas } from '@react-three/fiber';
+
+import { CAMERA_Z_POSITION, PLACEHOLDER_IMAGE_URL } from './constants/index';
+import EffectComposer from './effects/EffectComposer';
+import R3FCard from './r3f-components/Card';
 
 const HtmlCard = () => {
   return (
@@ -11,12 +12,12 @@ const HtmlCard = () => {
         className='object-cover opacity-30'
         src={PLACEHOLDER_IMAGE_URL}
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
-          width: "100vw",
-          height: "100vh",
-          objectFit: "cover",
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
           zIndex: 1,
         }}
       />
@@ -28,11 +29,11 @@ const THREECanvas = () => {
   return (
     <Canvas
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100vh",
+        width: '100%',
+        height: '100vh',
         zIndex: 10,
       }}
       camera={{
@@ -47,7 +48,7 @@ const THREECanvas = () => {
       <EffectComposer />
       {/* <OrbitControls makeDefault /> */}
       <ambientLight />
-      <color attach='background' args={["white"]} />
+      <color attach='background' args={['white']} />
     </Canvas>
   );
 };

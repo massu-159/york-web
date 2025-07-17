@@ -1,8 +1,10 @@
-import React, { forwardRef, useMemo } from "react";
-import { Uniform } from "three";
-import { Effect } from "postprocessing";
-import { onScreenFragmentShader } from "./shaders/onScreenFragmentShader";
-import * as THREE from "three";
+import { Effect } from 'postprocessing';
+import { Uniform } from 'three';
+import * as THREE from 'three';
+
+import React, { forwardRef, useMemo } from 'react';
+
+import { onScreenFragmentShader } from './shaders/onScreenFragmentShader';
 
 interface RippleEffectProps {
   bufferTexture?: THREE.Texture | null;
@@ -26,13 +28,13 @@ class MyCustomEffectImpl extends Effect {
     colorTexture = null,
     crocTexture = null,
   }: RippleEffectProps = {}) {
-    super("RippleEffect", onScreenFragmentShader, {
+    super('RippleEffect', onScreenFragmentShader, {
       uniforms: new Map<string, Uniform<any>>([
-        ["bufferTexture", new Uniform(bufferTexture)],
-        ["res", new Uniform(res)],
-        ["mouse", new Uniform(mouse)],
-        ["colorTexture", new Uniform(colorTexture)],
-        ["crocTexture", new Uniform(crocTexture)],
+        ['bufferTexture', new Uniform(bufferTexture)],
+        ['res', new Uniform(res)],
+        ['mouse', new Uniform(mouse)],
+        ['colorTexture', new Uniform(colorTexture)],
+        ['crocTexture', new Uniform(crocTexture)],
       ]),
     });
 
@@ -43,12 +45,16 @@ class MyCustomEffectImpl extends Effect {
     _crocTexture = crocTexture;
   }
 
-  update(renderer: THREE.WebGLRenderer, inputBuffer: THREE.WebGLRenderTarget, deltaTime: number) {
-    const bufferTextureUniform = this.uniforms.get("bufferTexture");
-    const resUniform = this.uniforms.get("res");
-    const mouseUniform = this.uniforms.get("mouse");
-    const colorTextureUniform = this.uniforms.get("colorTexture");
-    const crocTextureUniform = this.uniforms.get("crocTexture");
+  update(
+    renderer: THREE.WebGLRenderer,
+    inputBuffer: THREE.WebGLRenderTarget,
+    deltaTime: number,
+  ) {
+    const bufferTextureUniform = this.uniforms.get('bufferTexture');
+    const resUniform = this.uniforms.get('res');
+    const mouseUniform = this.uniforms.get('mouse');
+    const colorTextureUniform = this.uniforms.get('colorTexture');
+    const crocTextureUniform = this.uniforms.get('crocTexture');
 
     if (bufferTextureUniform) bufferTextureUniform.value = _bufferTexture;
     if (resUniform) resUniform.value = _res;
@@ -71,5 +77,5 @@ export const RippleEffect = forwardRef<Effect, RippleEffectProps>(
     }, [bufferTexture, res, mouse, colorTexture, crocTexture]);
 
     return <primitive ref={ref} object={effect} />;
-  }
+  },
 );

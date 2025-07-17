@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useRef, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface UseFocusManagementOptions {
   autoFocus?: boolean;
@@ -15,7 +15,7 @@ export function useFocusManagement(options: UseFocusManagementOptions = {}) {
 
   const focusFirst = useCallback(() => {
     if (!elementRef.current) return;
-    
+
     const focusableElements = getFocusableElements(elementRef.current);
     if (focusableElements.length > 0) {
       focusableElements[0].focus();
@@ -24,36 +24,40 @@ export function useFocusManagement(options: UseFocusManagementOptions = {}) {
 
   const focusLast = useCallback(() => {
     if (!elementRef.current) return;
-    
+
     const focusableElements = getFocusableElements(elementRef.current);
     if (focusableElements.length > 0) {
       focusableElements[focusableElements.length - 1].focus();
     }
   }, []);
 
-  const handleTabTrap = useCallback((event: KeyboardEvent) => {
-    if (!trapFocus || !elementRef.current || event.key !== 'Tab') return;
+  const handleTabTrap = useCallback(
+    (event: KeyboardEvent) => {
+      if (!trapFocus || !elementRef.current || event.key !== 'Tab') return;
 
-    const focusableElements = getFocusableElements(elementRef.current);
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+      const focusableElements = getFocusableElements(elementRef.current);
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
 
-    if (event.shiftKey) {
-      if (document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement?.focus();
+      if (event.shiftKey) {
+        if (document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement?.focus();
+        }
       }
-    } else {
-      if (document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement?.focus();
-      }
-    }
-  }, [trapFocus]);
+    },
+    [trapFocus],
+  );
 
   useEffect(() => {
     if (autoFocus) {
-      previouslyFocusedElement.current = document.activeElement as HTMLFormElement;
+      previouslyFocusedElement.current =
+        document.activeElement as HTMLFormElement;
       focusFirst();
     }
 
@@ -65,7 +69,7 @@ export function useFocusManagement(options: UseFocusManagementOptions = {}) {
       if (trapFocus) {
         document.removeEventListener('keydown', handleTabTrap);
       }
-      
+
       if (restoreFocus && previouslyFocusedElement.current) {
         previouslyFocusedElement.current.focus();
       }
@@ -105,15 +109,18 @@ function getFocusableElements(element: HTMLElement): HTMLElement[] {
   return Array.from(element.querySelectorAll(selector)) as HTMLElement[];
 }
 
-export function announceToScreenReader(message: string, priority: 'polite' | 'assertive' = 'polite') {
+export function announceToScreenReader(
+  message: string,
+  priority: 'polite' | 'assertive' = 'polite',
+) {
   const announcement = document.createElement('div');
   announcement.setAttribute('aria-live', priority);
   announcement.setAttribute('aria-atomic', 'true');
   announcement.setAttribute('class', 'sr-only');
   announcement.textContent = message;
-  
+
   document.body.appendChild(announcement);
-  
+
   setTimeout(() => {
     document.body.removeChild(announcement);
   }, 1000);

@@ -1,12 +1,13 @@
-import { useRef, forwardRef, useState, useMemo, useEffect } from "react";
-import { useFrame, useThree, createPortal } from "@react-three/fiber";
-import { OrthographicCamera, useFBO, Stats } from "@react-three/drei";
-import { EffectComposer as EffectComposerType } from "@react-three/postprocessing";
-import { Effect } from "postprocessing";
-import * as THREE from "three";
+import { OrthographicCamera, Stats, useFBO } from '@react-three/drei';
+import { createPortal, useFrame, useThree } from '@react-three/fiber';
+import { EffectComposer as EffectComposerType } from '@react-three/postprocessing';
+import { Effect } from 'postprocessing';
+import * as THREE from 'three';
 
-import { RippleEffect } from "./Ripple";
-import OffScreenScene from "./OffScreenScene";
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+
+import OffScreenScene from './OffScreenScene';
+import { RippleEffect } from './Ripple';
 
 const cameraZ = 1;
 const vec3 = new THREE.Vector3();
@@ -18,7 +19,10 @@ interface Props {
   [key: string]: any;
 }
 
-function calculateOrthographicZoom(camera: THREE.OrthographicCamera, object: THREE.Object3D): number {
+function calculateOrthographicZoom(
+  camera: THREE.OrthographicCamera,
+  object: THREE.Object3D,
+): number {
   const boundingBox = zoomCalcBox3.setFromObject(object);
   const objectSize = boundingBox.getSize(vec3);
 
@@ -31,7 +35,10 @@ function calculateOrthographicZoom(camera: THREE.OrthographicCamera, object: THR
   return Math.max(zoomX, zoomY);
 }
 
-function calculateDistanceToCamera(camera: THREE.Camera, object: THREE.Object3D): number {
+function calculateDistanceToCamera(
+  camera: THREE.Camera,
+  object: THREE.Object3D,
+): number {
   const cameraPosition = vec3;
   const objectPosition = vec3;
 
@@ -41,7 +48,10 @@ function calculateDistanceToCamera(camera: THREE.Camera, object: THREE.Object3D)
   return cameraPosition.distanceTo(objectPosition);
 }
 
-export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVectors: any) {
+export default forwardRef<THREE.Mesh, Props>(function Plane(
+  props: Props,
+  crocVectors: any,
+) {
   const { size, gl, set, scene } = useThree();
   const offScreen = useRef<THREE.Mesh>(null);
   const composerRef = useRef<any>(null);
@@ -60,7 +70,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
   res.x = size.width;
   res.y = size.height;
 
-  useFrame((state) => {
+  useFrame(state => {
     const { gl, clock } = state;
     gl.setRenderTarget(textureB);
     if (offScreenCameraRef.current) {
@@ -74,11 +84,16 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
 
     if (rippleShaderPassRef.current && offScreen.current) {
       const rippleUniforms = rippleShaderPassRef.current.uniforms;
-      const offScreenMaterial = offScreen.current.material as THREE.ShaderMaterial;
-      if (rippleUniforms && rippleUniforms.get("bufferTexture")) {
-        rippleUniforms.get("bufferTexture")!.value = textureB.texture;
+      const offScreenMaterial = offScreen.current
+        .material as THREE.ShaderMaterial;
+      if (rippleUniforms && rippleUniforms.get('bufferTexture')) {
+        rippleUniforms.get('bufferTexture')!.value = textureB.texture;
       }
-      if (offScreenMaterial && offScreenMaterial.uniforms && offScreenMaterial.uniforms.bufferTexture) {
+      if (
+        offScreenMaterial &&
+        offScreenMaterial.uniforms &&
+        offScreenMaterial.uniforms.bufferTexture
+      ) {
         offScreenMaterial.uniforms.bufferTexture.value = textureA.texture;
       }
 
@@ -88,10 +103,10 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
           offScreenMaterial.uniforms.mouse.value.y = 0.6;
           offScreenMaterial.uniforms.mouse.value.z = 1.01;
         }
-        if (rippleUniforms && rippleUniforms.get("mouse")) {
-          rippleUniforms.get("mouse")!.value.x = 0.5;
-          rippleUniforms.get("mouse")!.value.y = 0.5;
-          rippleUniforms.get("mouse")!.value.z = 1.01;
+        if (rippleUniforms && rippleUniforms.get('mouse')) {
+          rippleUniforms.get('mouse')!.value.x = 0.5;
+          rippleUniforms.get('mouse')!.value.y = 0.5;
+          rippleUniforms.get('mouse')!.value.z = 1.01;
         }
       } else {
         if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.mouse) {
@@ -99,10 +114,10 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
           offScreenMaterial.uniforms.mouse.value.y = 0.5;
           offScreenMaterial.uniforms.mouse.value.z = 0.0;
         }
-        if (rippleUniforms && rippleUniforms.get("mouse")) {
-          rippleUniforms.get("mouse")!.value.x = 0.5;
-          rippleUniforms.get("mouse")!.value.y = 0.5;
-          rippleUniforms.get("mouse")!.value.z = 1.01;
+        if (rippleUniforms && rippleUniforms.get('mouse')) {
+          rippleUniforms.get('mouse')!.value.x = 0.5;
+          rippleUniforms.get('mouse')!.value.y = 0.5;
+          rippleUniforms.get('mouse')!.value.z = 1.01;
         }
       }
       if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.time) {
@@ -121,11 +136,19 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
 
   useEffect(() => {
     if (offScreenCameraRef.current && offScreen.current) {
-      const zoom = calculateOrthographicZoom(offScreenCameraRef.current, offScreen.current);
+      const zoom = calculateOrthographicZoom(
+        offScreenCameraRef.current,
+        offScreen.current,
+      );
 
       setOrthoZoom(zoom);
 
-      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const camera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      );
       camera.position.set(0, 0, cameraZ);
       set({ camera });
     }
@@ -133,7 +156,11 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
 
   return (
     <>
-      <EffectComposerType ref={composerRef} multisampling={8} depthBuffer={true}>
+      <EffectComposerType
+        ref={composerRef}
+        multisampling={8}
+        depthBuffer={true}
+      >
         <RippleEffect
           ref={rippleShaderPassRef}
           bufferTexture={onScreenFBOTexture.texture}
@@ -143,7 +170,10 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
       </EffectComposerType>
       {createPortal(
         <>
-          <OffScreenScene ref={offScreen} bufferTexture={offScreenFBOTexture.texture} />
+          <OffScreenScene
+            ref={offScreen}
+            bufferTexture={offScreenFBOTexture.texture}
+          />
           <OrthographicCamera
             makeDefault
             position={[0, 0, 2]}
@@ -153,7 +183,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(props: Props, crocVe
             zoom={orthoZoom}
           />
         </>,
-        offScreenScene
+        offScreenScene,
       )}
     </>
   );
