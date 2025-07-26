@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import { ThemeProvider } from '@/components/theme-provider';
-
-import './globals.css';
+import './global.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,22 +22,15 @@ export default function RootLayout({
         <a href='#main-content' className='skip-link'>
           メインコンテンツへスキップ
         </a>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div id='main-content' role='main'>
-            {children}
-          </div>
-          <div
-            aria-live='polite'
-            aria-atomic='true'
-            className='sr-only'
-            id='announcements'
-          ></div>
-        </ThemeProvider>
+        <div id='main-content' role='main'>
+          {children}
+        </div>
+        <div
+          aria-live='polite'
+          aria-atomic='true'
+          className='sr-only'
+          id='announcements'
+        ></div>
       </body>
     </html>
   );

@@ -9,17 +9,8 @@ const HtmlCard = () => {
     <>
       <img
         id='target-image'
-        className='object-cover opacity-30'
+        className='absolute top-0 left-0 object-cover w-full h-full'
         src={PLACEHOLDER_IMAGE_URL}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          zIndex: 1,
-        }}
       />
     </>
   );
@@ -32,7 +23,7 @@ const THREECanvas = () => {
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '100%',
+        width: '100vw',
         height: '100vh',
         zIndex: 10,
       }}
