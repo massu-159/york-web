@@ -16,7 +16,7 @@ export function Hero() {
           src='/images/hero-bg.jpg'
           alt='Hero background'
           fill
-          className='w-full h-full object-cover opacity-30 md:hidden'
+          className='w-full h-full object-cover md:hidden'
           priority
           style={{
             transform: 'translateZ(0)',

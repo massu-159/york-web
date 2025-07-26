@@ -1,10 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
 import Link from 'next/link';
-
-import { ThemeToggle } from '@/components/theme-toggle';
 import { useKeyboardNavigation } from '@/hooks/use-keyboard-navigation';
 
 export function Navigation() {
@@ -75,7 +72,7 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className='text-foreground hover:text-foreground/80 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-md px-2 py-1'
+                className='text-foreground hover:text-foreground/80 rounded-md px-2 py-1'
                 aria-label={item.ariaLabel}
                 data-nav-item
                 tabIndex={index === currentFocusIndex ? 0 : -1}
@@ -83,7 +80,6 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
-            <ThemeToggle />
           </div>
         </div>
       </div>
