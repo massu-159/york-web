@@ -29,7 +29,7 @@ export function Hero() {
           <Ripple />
         </div>
       </div>
-      <div className='relative z-20 max-w-3xl mx-auto ml-4 md:ml-20'>
+      <div className='relative z-20 max-w-3xl mx-auto'>
         <h2 className='text-2xl mb-4' aria-level={2}>
           Creative Web Solutions
         </h2>
