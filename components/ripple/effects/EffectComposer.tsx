@@ -82,7 +82,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(
     textureA = textureB;
     textureB = t;
 
-    if (rippleShaderPassRef.current && offScreen.current) {
+    if (rippleShaderPassRef.current && offScreen.current && offScreen.current.material) {
       const rippleUniforms = rippleShaderPassRef.current.uniforms;
       const offScreenMaterial = offScreen.current
         .material as THREE.ShaderMaterial;
@@ -104,9 +104,12 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(
           offScreenMaterial.uniforms.mouse.value.z = 1.01;
         }
         if (rippleUniforms && rippleUniforms.get('mouse')) {
-          rippleUniforms.get('mouse')!.value.x = 0.5;
-          rippleUniforms.get('mouse')!.value.y = 0.5;
-          rippleUniforms.get('mouse')!.value.z = 1.01;
+          const mouseUniform = rippleUniforms.get('mouse');
+          if (mouseUniform && mouseUniform.value) {
+            mouseUniform.value.x = 0.5;
+            mouseUniform.value.y = 0.5;
+            mouseUniform.value.z = 1.01;
+          }
         }
       } else {
         if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.mouse) {
@@ -115,9 +118,12 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(
           offScreenMaterial.uniforms.mouse.value.z = 0.0;
         }
         if (rippleUniforms && rippleUniforms.get('mouse')) {
-          rippleUniforms.get('mouse')!.value.x = 0.5;
-          rippleUniforms.get('mouse')!.value.y = 0.5;
-          rippleUniforms.get('mouse')!.value.z = 1.01;
+          const mouseUniform = rippleUniforms.get('mouse');
+          if (mouseUniform && mouseUniform.value) {
+            mouseUniform.value.x = 0.5;
+            mouseUniform.value.y = 0.5;
+            mouseUniform.value.z = 1.01;
+          }
         }
       }
       if (offScreenMaterial.uniforms && offScreenMaterial.uniforms.time) {
