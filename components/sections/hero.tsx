@@ -29,9 +29,7 @@ export function Hero() {
         />
         <div className='absolute inset-0 hidden md:block h-full'>
           <Suspense fallback={<LoadingFallback />}>
-            <div className='animate-fade-in'>
-              <Ripple />
-            </div>
+            <Ripple />
           </Suspense>
         </div>
       </div>

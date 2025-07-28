@@ -1,10 +1,10 @@
-import { OrthographicCamera, Stats, useFBO } from '@react-three/drei';
+import { OrthographicCamera, useFBO } from '@react-three/drei';
 import { createPortal, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer as EffectComposerType } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
 import * as THREE from 'three';
 
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 
 import OffScreenScene from './OffScreenScene';
 import { RippleEffect } from './Ripple';
@@ -35,29 +35,14 @@ function calculateOrthographicZoom(
   return Math.max(zoomX, zoomY);
 }
 
-function calculateDistanceToCamera(
-  camera: THREE.Camera,
-  object: THREE.Object3D,
-): number {
-  const cameraPosition = vec3;
-  const objectPosition = vec3;
-
-  camera.getWorldPosition(cameraPosition);
-  object.getWorldPosition(objectPosition);
-
-  return cameraPosition.distanceTo(objectPosition);
-}
-
-export default forwardRef<THREE.Mesh, Props>(function Plane(
-  props: Props,
-  crocVectors: any,
-) {
-  const { size, gl, set, scene } = useThree();
+export default forwardRef<THREE.Mesh, Props>(function Plane() {
+  const { size, gl, scene, camera, set } = useThree();
   const offScreen = useRef<THREE.Mesh>(null);
   const composerRef = useRef<any>(null);
   const rippleShaderPassRef = useRef<Effect | null>(null);
 
   const [orthoZoom, setOrthoZoom] = useState<number>(1);
+  const [canvasReady, setCanvasReady] = useState<boolean>(false);
 
   const offScreenFBOTexture = useFBO(size.width, size.height);
   const onScreenFBOTexture = useFBO(size.width, size.height);
@@ -70,7 +55,17 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(
   res.x = size.width;
   res.y = size.height;
 
+  // Canvas ready state check
+  useEffect(() => {
+    if (gl && scene && camera && offScreenCameraRef.current && composerRef.current) {
+      setCanvasReady(true);
+    }
+  }, [gl, scene, camera, offScreenCameraRef.current, composerRef.current]);
+
   useFrame(state => {
+    // Guard clause: only proceed if canvas is ready
+    if (!canvasReady) return;
+
     const { gl, clock } = state;
     gl.setRenderTarget(textureB);
     if (offScreenCameraRef.current) {
