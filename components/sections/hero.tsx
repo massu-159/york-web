@@ -11,6 +11,7 @@ export function Hero() {
     useState<React.ComponentType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [showRipple, setShowRipple] = useState(false);
 
   useEffect(() => {
     const loadRipple = async () => {
@@ -18,11 +19,13 @@ export function Hero() {
         setIsLoading(true);
         setHasError(false);
 
-        // 少し遅延を入れてローディング状態を表示
-        await new Promise(resolve => setTimeout(resolve, 100));
-
         const { default: Ripple } = await import('@/components/ripple/ripple');
         setRippleComponent(() => Ripple);
+        // ローディング完了後、少し遅延してからフェードイン開始
+        setTimeout(() => {
+          setShowRipple(true);
+        }, 100);
+
       } catch (error) {
         console.error('Failed to load Ripple component:', error);
         setHasError(true);
@@ -57,7 +60,17 @@ export function Hero() {
       );
     }
 
-    return RippleComponent && <RippleComponent />;
+    return (
+      RippleComponent && (
+        <div
+          className={`transition-opacity duration-1000 ${
+            showRipple ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <RippleComponent />
+        </div>
+      )
+    );
   };
 
   return (
@@ -84,7 +97,13 @@ export function Hero() {
           {renderRippleContent()}
         </div>
       </div>
-      <div className='relative z-20 max-w-3xl mx-auto'>
+      <div
+        className={`relative z-20 max-w-3xl mx-auto transition-all duration-1000 ${
+          !isLoading
+            ? 'opacity-100 translate-y-0 delay-300'
+            : 'opacity-0 translate-y-8'
+        }`}
+      >
         <h2 className='text-2xl mb-4' aria-level={2}>
           Creative Web Solutions
         </h2>

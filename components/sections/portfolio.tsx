@@ -46,9 +46,9 @@ const portfolioItems = [
 export function Portfolio() {
   return (
     <section id='portfolio' className='relative py-20 overflow-hidden'>
-      <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple'></div>
-      <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple [animation-delay:2s]'></div>
-      <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple [animation-delay:4s]'></div>
+      <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple opacity-0'></div>
+      <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple opacity-0 [animation-delay:2s]'></div>
+      <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple opacity-0 [animation-delay:4s]'></div>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <h2 className='text-3xl font-bold text-center mb-2'>Our Portfolio</h2>
         <p className='text-muted-foreground text-center mb-12'>
