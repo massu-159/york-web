@@ -37,29 +37,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* Accessibility improvements */
-@layer utilities {
-  /* Focus visible styles for better keyboard navigation */
-  .focus-visible {
-    @apply outline-none ring-2 ring-pink-500 ring-offset-2;
-  }
-
-  /* Skip links for keyboard navigation */
-  .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 6px;
-    background: hsl(var(--background));
-    color: hsl(var(--foreground));
-    padding: 8px;
-    text-decoration: none;
-    border: 1px solid hsl(var(--border));
-    border-radius: 4px;
-    z-index: 100;
-  }
-
-  .skip-link:focus {
-    top: 6px;
-  }
-}
