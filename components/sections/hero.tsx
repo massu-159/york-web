@@ -119,7 +119,7 @@ export function Hero() {
           experiences.
         </p>
         <button
-          className='bg-pink-600 text-white px-8 py-3 rounded-full hover:bg-pink-700 transition-colors focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2'
+          className='bg-pink-600 text-white px-8 py-3 rounded-full hover:bg-pink-700 transition-colors'
           aria-label='サービスを始める'
           type='button'
         >

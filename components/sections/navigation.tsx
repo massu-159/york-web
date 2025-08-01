@@ -1,14 +1,6 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useKeyboardNavigation } from '@/hooks/use-keyboard-navigation';
 
 export function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigationRef = useRef<HTMLElement>(null);
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(0);
-
   const navItems = [
     { href: '#', label: 'Home', ariaLabel: 'ホームセクションへ移動' },
     {
@@ -29,29 +21,8 @@ export function Navigation() {
     },
   ];
 
-  useKeyboardNavigation({
-    onArrowLeft: () => {
-      setCurrentFocusIndex(prev => (prev > 0 ? prev - 1 : navItems.length - 1));
-    },
-    onArrowRight: () => {
-      setCurrentFocusIndex(prev => (prev < navItems.length - 1 ? prev + 1 : 0));
-    },
-    onEscape: () => {
-      setIsMenuOpen(false);
-    },
-  });
-
-  useEffect(() => {
-    const navLinks =
-      navigationRef.current?.querySelectorAll('a[data-nav-item]');
-    if (navLinks && navLinks[currentFocusIndex]) {
-      (navLinks[currentFocusIndex] as HTMLElement).focus();
-    }
-  }, [currentFocusIndex]);
-
   return (
     <nav
-      ref={navigationRef}
       className='fixed top-0 w-full bg-background/80 backdrop-blur-sm z-50 border-b'
       role='navigation'
       aria-label='メインナビゲーション'
@@ -74,8 +45,6 @@ export function Navigation() {
                 href={item.href}
                 className='text-foreground hover:text-foreground/80 rounded-md px-2 py-1'
                 aria-label={item.ariaLabel}
-                data-nav-item
-                tabIndex={index === currentFocusIndex ? 0 : -1}
               >
                 {item.label}
               </Link>
