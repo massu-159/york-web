@@ -4,25 +4,17 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 
 import { useState } from 'react';
 
-import {
-  announceToScreenReader,
-  useFocusManagement,
-} from '@/hooks/use-focus-management';
-
 export function Contact() {
   const [formStatus, setFormStatus] = useState<
     'idle' | 'submitting' | 'success' | 'error'
   >('idle');
-  const { elementRef } = useFocusManagement({ autoFocus: false });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus('submitting');
-    announceToScreenReader('メッセージを送信中です', 'assertive');
 
     setTimeout(() => {
       setFormStatus('success');
-      announceToScreenReader('メッセージが正常に送信されました', 'assertive');
     }, 2000);
   };
 
@@ -100,7 +92,6 @@ export function Contact() {
             </div>
           </div>
           <form
-            ref={elementRef}
             className='space-y-6'
             role='form'
             aria-labelledby='contact-form-heading'
@@ -156,7 +147,7 @@ export function Contact() {
             </div>
             <button
               type='submit'
-              className='bg-pink-600 text-white px-8 py-3 rounded-full hover:bg-pink-700 transition-colors w-full focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2'
+              className='bg-pink-600 text-white px-8 py-3 rounded-full hover:bg-pink-700 transition-colors w-full'
               aria-label='メッセージを送信する'
             >
               SEND MESSAGE
