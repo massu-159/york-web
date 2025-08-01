@@ -19,18 +19,9 @@ export default function RootLayout({
   return (
     <html lang='ja' className='scroll-smooth'>
       <body className={inter.className}>
-        <a href='#main-content' className='skip-link'>
-          メインコンテンツへスキップ
-        </a>
         <div id='main-content' role='main'>
           {children}
         </div>
-        <div
-          aria-live='polite'
-          aria-atomic='true'
-          className='sr-only'
-          id='announcements'
-        ></div>
       </body>
     </html>
   );

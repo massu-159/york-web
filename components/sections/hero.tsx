@@ -1,10 +1,65 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Image from 'next/image';
 
-import Ripple from '@/components/ripple/ripple';
+import { LoadingFallback } from '@/components/ui/loading-fallback';
 
 export function Hero() {
+  const [RippleComponent, setRippleComponent] =
+    useState<React.ComponentType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const loadRipple = async () => {
+      try {
+        setIsLoading(true);
+        setHasError(false);
+
+        // 少し遅延を入れてローディング状態を表示
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const { default: Ripple } = await import('@/components/ripple/ripple');
+        setRippleComponent(() => Ripple);
+      } catch (error) {
+        console.error('Failed to load Ripple component:', error);
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadRipple();
+  }, []);
+
+  const renderRippleContent = () => {
+    if (isLoading) {
+      return <LoadingFallback />;
+    }
+
+    if (hasError) {
+      return (
+        <div className='absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100'>
+          <div className='text-center'>
+            <p className='text-gray-600 mb-2'>
+              3Dエフェクトの読み込みに失敗しました
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className='text-sm text-pink-600 hover:text-pink-700 underline'
+            >
+              再読み込み
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return RippleComponent && <RippleComponent />;
+  };
+
   return (
     <section
       className='relative min-h-screen py-20 flex items-center px-4'
@@ -26,7 +81,7 @@ export function Hero() {
           }}
         />
         <div className='absolute inset-0 hidden md:block h-full'>
-          <Ripple />
+          {renderRippleContent()}
         </div>
       </div>
       <div className='relative z-20 max-w-3xl mx-auto'>
