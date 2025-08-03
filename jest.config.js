@@ -9,6 +9,12 @@ const customJestConfig = {
   moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/tests/',
+    '<rootDir>/out/'
+  ],
   testEnvironment: 'jest-environment-jsdom',
   testMatch: [
     '**/__tests__/**/*.(js|jsx|ts|tsx)',
@@ -20,8 +26,15 @@ const customJestConfig = {
     '!**/node_modules/**',
     '!**/.next/**',
     '!**/coverage/**',
+    '!**/out/**',
+    '!**/tests/**',
     '!jest.config.js',
     '!jest.setup.js',
+    '!jest.polyfills.js',
+    '!playwright.config.ts',
+    '!next.config.js',
+    '!tailwind.config.ts',
+    '!postcss.config.js',
   ],
   setupFiles: ['<rootDir>/jest.polyfills.js'],
 };

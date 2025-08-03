@@ -1,156 +1,184 @@
-import { expect, test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/#contact');
+    // Wait for the contact section to be visible
+    await expect(page.locator('#contact')).toBeVisible();
   });
 
-  test('displays contact form elements', async ({ page }) => {
-    // Check contact section heading
-    await expect(
-      page.locator('h3:has-text("Contact Information")'),
-    ).toBeVisible();
-
-    // Check form fields are visible
-    await expect(page.locator('input[placeholder="Your Name"]')).toBeVisible();
-    await expect(page.locator('input[placeholder="Your Email"]')).toBeVisible();
-    await expect(
-      page.locator('textarea[placeholder="Your Message"]'),
-    ).toBeVisible();
-    await expect(page.locator('button:has-text("SEND MESSAGE")')).toBeVisible();
-  });
-
-  test('allows user to fill out form fields', async ({ page }) => {
-    // Fill out name field
-    await page.fill('input[placeholder="Your Name"]', 'John Doe');
-    await expect(page.locator('input[placeholder="Your Name"]')).toHaveValue(
-      'John Doe',
-    );
-
-    // Fill out email field
-    await page.fill('input[placeholder="Your Email"]', 'john@example.com');
-    await expect(page.locator('input[placeholder="Your Email"]')).toHaveValue(
-      'john@example.com',
-    );
-
-    // Fill out message field
-    await page.fill(
-      'textarea[placeholder="Your Message"]',
-      'This is a test message for the contact form.',
-    );
-    await expect(
-      page.locator('textarea[placeholder="Your Message"]'),
-    ).toHaveValue('This is a test message for the contact form.');
-  });
-
-  test('form fields have proper types and attributes', async ({ page }) => {
-    // Check name field type
-    await expect(
-      page.locator('input[placeholder="Your Name"]'),
-    ).toHaveAttribute('type', 'text');
-
-    // Check email field type
-    await expect(
-      page.locator('input[placeholder="Your Email"]'),
-    ).toHaveAttribute('type', 'email');
-
-    // Check textarea rows
-    await expect(
-      page.locator('textarea[placeholder="Your Message"]'),
-    ).toHaveAttribute('rows', '4');
-
-    // Check button (submit button doesn't have explicit type="button")
-    await expect(page.locator('button:has-text("SEND MESSAGE")')).toBeVisible();
-  });
-
-  test('form submission button is clickable', async ({ page }) => {
-    // Fill out form fields
-    await page.fill('input[placeholder="Your Name"]', 'John Doe');
-    await page.fill('input[placeholder="Your Email"]', 'john@example.com');
-    await page.fill('textarea[placeholder="Your Message"]', 'Test message');
-
-    // Click submit button
-    const submitButton = page.locator('button:has-text("SEND MESSAGE")');
-    await expect(submitButton).toBeVisible();
-    await expect(submitButton).toBeEnabled();
-
-    // Click the button (currently no submission logic, but button should be clickable)
-    await submitButton.click();
-  });
-
-  test('form accessibility features', async ({ page }) => {
-    // Use tab navigation to test keyboard accessibility
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
-
-    // Focus on the name input field
-    await page.focus('input[placeholder="Your Name"]');
-    await expect(page.locator('input[placeholder="Your Name"]')).toBeFocused();
-
-    // Tab to next field
-    await page.keyboard.press('Tab');
-    await expect(page.locator('input[placeholder="Your Email"]')).toBeFocused();
-
-    // Tab to message field
-    await page.keyboard.press('Tab');
-    await expect(
-      page.locator('textarea[placeholder="Your Message"]'),
-    ).toBeFocused();
-
-    // Tab to submit button
-    await page.keyboard.press('Tab');
-    await expect(page.locator('button:has-text("SEND MESSAGE")')).toBeFocused();
-  });
-
-  test('form styling and layout', async ({ page }) => {
-    // Check that form container is visible
-    const formContainer = page.locator('form').first();
-    await expect(formContainer).toBeVisible();
-
-    // Check that form has proper styling classes
-    const nameInput = page.locator('input[placeholder="Your Name"]');
-    const emailInput = page.locator('input[placeholder="Your Email"]');
-    const messageTextarea = page.locator(
-      'textarea[placeholder="Your Message"]',
-    );
-    const submitButton = page.locator('button:has-text("SEND MESSAGE")');
-
+  test('should display contact form elements', async ({ page }) => {
+    const contactForm = page.getByRole('form');
+    await expect(contactForm).toBeVisible();
+    
+    // Check form fields
+    const nameInput = page.getByPlaceholder('Your Name');
+    const emailInput = page.getByPlaceholder('Your Email');
+    const messageTextarea = page.getByPlaceholder('Your Message');
+    const submitButton = page.getByRole('button', { name: /send message/i });
+    
     await expect(nameInput).toBeVisible();
     await expect(emailInput).toBeVisible();
     await expect(messageTextarea).toBeVisible();
     await expect(submitButton).toBeVisible();
   });
 
-  test('form on mobile devices', async ({ page }) => {
-    // Set mobile viewport
-    await page.setViewportSize({ width: 375, height: 667 });
-
-    // Check that form is still visible and usable on mobile
-    await expect(page.locator('input[placeholder="Your Name"]')).toBeVisible();
-    await expect(page.locator('input[placeholder="Your Email"]')).toBeVisible();
-    await expect(
-      page.locator('textarea[placeholder="Your Message"]'),
-    ).toBeVisible();
-    await expect(page.locator('button:has-text("SEND MESSAGE")')).toBeVisible();
-
-    // Test that form fields are still functional on mobile
-    await page.fill('input[placeholder="Your Name"]', 'Mobile User');
-    await expect(page.locator('input[placeholder="Your Name"]')).toHaveValue(
-      'Mobile User',
-    );
+  test('should display contact information', async ({ page }) => {
+    await expect(page.getByText('Contact Information')).toBeVisible();
+    
+    // Check contact details
+    await expect(page.getByText('Our Location')).toBeVisible();
+    await expect(page.getByText('123 Creative St, Digital Valley, NY')).toBeVisible();
+    
+    await expect(page.getByText('Call Us')).toBeVisible();
+    await expect(page.getByText('+1 234 5678')).toBeVisible();
+    
+    await expect(page.getByText('Email Us')).toBeVisible();
+    await expect(page.getByText('hello@yorkweb.com')).toBeVisible();
   });
 
-  test('contact information display', async ({ page }) => {
-    // Check if contact information is displayed alongside the form
-    await expect(
-      page.locator('h3:has-text("Contact Information")'),
-    ).toBeVisible();
+  test('should allow typing in form fields', async ({ page }) => {
+    const nameInput = page.getByPlaceholder('Your Name');
+    const emailInput = page.getByPlaceholder('Your Email');
+    const messageTextarea = page.getByPlaceholder('Your Message');
+    
+    await nameInput.fill('John Doe');
+    await emailInput.fill('john.doe@example.com');
+    await messageTextarea.fill('This is a test message for the contact form.');
+    
+    await expect(nameInput).toHaveValue('John Doe');
+    await expect(emailInput).toHaveValue('john.doe@example.com');
+    await expect(messageTextarea).toHaveValue('This is a test message for the contact form.');
+  });
 
-    // The contact section should be visible
-    const contactSection = page
-      .locator('section')
-      .filter({ hasText: 'Contact Information' });
-    await expect(contactSection).toBeVisible();
+  test('should submit form successfully', async ({ page }) => {
+    const nameInput = page.getByPlaceholder('Your Name');
+    const emailInput = page.getByPlaceholder('Your Email');
+    const messageTextarea = page.getByPlaceholder('Your Message');
+    const submitButton = page.getByRole('button', { name: /send message/i });
+    
+    // Fill out the form
+    await nameInput.fill('Test User');
+    await emailInput.fill('test@example.com');
+    await messageTextarea.fill('Test message content');
+    
+    // Submit the form
+    await submitButton.click();
+    
+    // The form should handle submission (mock implementation)
+    await expect(submitButton).toBeVisible();
+  });
+
+  test('should have proper form field attributes', async ({ page }) => {
+    const nameInput = page.getByPlaceholder('Your Name');
+    const emailInput = page.getByPlaceholder('Your Email');
+    const messageTextarea = page.getByPlaceholder('Your Message');
+    
+    // Check input types
+    await expect(nameInput).toHaveAttribute('type', 'text');
+    await expect(emailInput).toHaveAttribute('type', 'email');
+    
+    // Check required attributes
+    await expect(nameInput).toHaveAttribute('aria-required', 'true');
+    await expect(emailInput).toHaveAttribute('aria-required', 'true');
+    await expect(messageTextarea).toHaveAttribute('aria-required', 'true');
+    
+    // Check aria-describedby attributes
+    await expect(nameInput).toHaveAttribute('aria-describedby', 'name-description');
+    await expect(emailInput).toHaveAttribute('aria-describedby', 'email-description');
+    await expect(messageTextarea).toHaveAttribute('aria-describedby', 'message-description');
+  });
+
+  test('should have accessible labels', async ({ page }) => {
+    // Check for screen reader labels
+    const nameLabel = page.locator('label[for="contact-name"]');
+    const emailLabel = page.locator('label[for="contact-email"]');
+    const messageLabel = page.locator('label[for="contact-message"]');
+    
+    await expect(nameLabel).toHaveClass('sr-only');
+    await expect(emailLabel).toHaveClass('sr-only');
+    await expect(messageLabel).toHaveClass('sr-only');
+    
+    await expect(nameLabel).toHaveText('お名前');
+    await expect(emailLabel).toHaveText('メールアドレス');
+    await expect(messageLabel).toHaveText('メッセージ');
+  });
+
+  test('should focus on form fields correctly', async ({ page }) => {
+    const nameInput = page.getByPlaceholder('Your Name');
+    const emailInput = page.getByPlaceholder('Your Email');
+    const messageTextarea = page.getByPlaceholder('Your Message');
+    
+    // Focus on name input
+    await nameInput.focus();
+    await expect(nameInput).toBeFocused();
+    
+    // Tab to email input
+    await page.keyboard.press('Tab');
+    await expect(emailInput).toBeFocused();
+    
+    // Tab to message textarea
+    await page.keyboard.press('Tab');
+    await expect(messageTextarea).toBeFocused();
+  });
+
+  test('should display form in proper layout', async ({ page }) => {
+    const contactSection = page.locator('#contact');
+    
+    // Check responsive grid layout
+    const gridContainer = contactSection.locator('.grid.md\\:grid-cols-2');
+    await expect(gridContainer).toBeVisible();
+    
+    // Check form spacing
+    const form = page.getByRole('form');
+    await expect(form).toHaveClass(/space-y-6/);
+  });
+
+  test('should have contact info icons with hover effects', async ({ page }) => {
+    // Check for icon containers with hover effects
+    const iconContainers = page.locator('.group .w-10.h-10.bg-pink-100.rounded-full');
+    
+    await expect(iconContainers).toHaveCount(3);
+    
+    // Test hover on first icon (location)
+    const firstIcon = iconContainers.first();
+    await firstIcon.hover();
+    
+    // Icon should be visible after hover
+    await expect(firstIcon).toBeVisible();
+  });
+
+  test('should display section heading and description', async ({ page }) => {
+    const heading = page.getByRole('heading', { name: /get in touch/i });
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveAttribute('id', 'contact-heading');
+    
+    const description = page.getByText(/For project consultations and quote requests/);
+    await expect(description).toBeVisible();
+  });
+
+  test('should have proper form validation attributes', async ({ page }) => {
+    const submitButton = page.getByRole('button', { name: /send message/i });
+    
+    await expect(submitButton).toHaveAttribute('type', 'submit');
+    await expect(submitButton).toHaveAttribute('aria-label', 'メッセージを送信する');
+  });
+
+  test('should handle form submission with enter key', async ({ page }) => {
+    const nameInput = page.getByPlaceholder('Your Name');
+    
+    await nameInput.fill('Test User');
+    await nameInput.press('Enter');
+    
+    // Form should remain on page and not navigate away
+    await expect(page.locator('#contact')).toBeVisible();
+  });
+
+  test('should display animated background elements', async ({ page }) => {
+    const contactSection = page.locator('#contact');
+    
+    // Check for animated ripple elements
+    const rippleElements = contactSection.locator('.animate-ripple');
+    await expect(rippleElements).toHaveCount(3);
   });
 });

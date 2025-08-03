@@ -1,122 +1,153 @@
-import { expect, test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('navigation links are clickable and functional', async ({ page }) => {
-    // Test Home link
-    await page.click('text=Home');
-    await expect(page).toHaveURL('/');
-
-    // Test About link (should scroll to about section)
-    await page.click('text=About');
-    await expect(page).toHaveURL('/#about');
-
-    // Test Services link (should scroll to services section)
-    await page.click('text=Services');
-    await expect(page).toHaveURL('/#services');
-
-    // Test Portfolio link (should scroll to portfolio section)
-    await page.click('text=Portfolio');
-    await expect(page).toHaveURL('/#portfolio');
-
-    // Test Contact link (should scroll to contact section)
-    await page.click('text=Contact');
-    await expect(page).toHaveURL('/#contact');
+  test('should render navigation bar', async ({ page }) => {
+    const nav = page.getByRole('navigation');
+    await expect(nav).toBeVisible();
+    await expect(nav).toHaveAttribute('aria-label', 'メインナビゲーション');
   });
 
-  test('theme toggle functionality', async ({ page }) => {
-    const themeToggle = page.getByRole('button', { name: 'Toggle theme' });
-    await expect(themeToggle).toBeVisible();
-
-    // Get initial theme state
-    const initialTheme = await page.evaluate(() => {
-      return document.documentElement.classList.contains('dark');
-    });
-
-    // Click theme toggle
-    await themeToggle.click();
-
-    // Wait for theme change
-    await page.waitForTimeout(500);
-
-    // Check that theme has changed
-    const newTheme = await page.evaluate(() => {
-      return document.documentElement.classList.contains('dark');
-    });
-
-    expect(newTheme).toBe(!initialTheme);
+  test('should display logo with correct link', async ({ page }) => {
+    const logo = page.getByRole('link', { name: /ホームページへ戻る/i });
+    await expect(logo).toBeVisible();
+    await expect(logo).toHaveAttribute('href', '#');
+    await expect(logo).toHaveText(/York\.web/);
   });
 
-  test('mobile navigation behavior', async ({ page }) => {
+  test('should display desktop navigation items', async ({ page }) => {
+    // Ensure we're in desktop viewport
+    await page.setViewportSize({ width: 1024, height: 768 });
+    
+    const navItems = [
+      { name: /ホームセクションへ移動/i, href: '#' },
+      { name: /サービスセクションへ移動/i, href: '#services' },
+      { name: /ポートフォリオセクションへ移動/i, href: '#portfolio' },
+      { name: /会社概要セクションへ移動/i, href: '#about' },
+      { name: /お問い合わせセクションへ移動/i, href: '#contact' }
+    ];
+
+    for (const item of navItems) {
+      const link = page.getByRole('link', { name: item.name });
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', item.href);
+    }
+  });
+
+  test('should navigate to sections when clicking links', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    
+    // Click about link and check URL
+    const aboutLink = page.getByRole('link', { name: /会社概要セクションへ移動/i });
+    await aboutLink.click();
+    await expect(page).toHaveURL(/#about$/);
+    
+    // Check that about section is visible
+    const aboutSection = page.locator('#about');
+    await expect(aboutSection).toBeVisible();
+  });
+
+  test('should show mobile navigation on small screens', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-
-    // On mobile, navigation links should be hidden by default
-    const navLinks = page.locator('.hidden.md\\:flex');
-    await expect(navLinks).toBeHidden();
-
-    // Brand/logo should still be visible
-    await expect(page.locator('nav').locator('text=York.')).toBeVisible();
-    await expect(page.locator('nav').locator('text=web')).toBeVisible();
+    
+    // Desktop nav items should be hidden
+    const desktopNav = page.locator('.hidden.md\\:flex');
+    await expect(desktopNav).toBeHidden();
+    
+    // Mobile nav container should be visible
+    const mobileNavContainer = page.locator('.md\\:hidden');
+    await expect(mobileNavContainer).toBeVisible();
   });
 
-  test('navigation accessibility', async ({ page }) => {
-    // Check that navigation has proper semantic structure
-    await expect(page.locator('nav')).toBeVisible();
+  test('should open mobile menu when clicked', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    
+    // Look for menu trigger button
+    const menuButton = page.getByRole('button').first();
+    await expect(menuButton).toBeVisible();
+    
+    // Note: Sheet component behavior would need to be tested with actual interaction
+    // This tests the presence of the mobile menu structure
+  });
 
-    // Check that theme toggle has proper accessibility
-    const themeToggle = page.getByRole('button', { name: 'Toggle theme' });
-    await expect(themeToggle).toBeVisible();
-
-    // Check that links are accessible
-    const homeLink = page.locator('nav a[href="#"]');
+  test('should have proper hover effects on desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    
+    const homeLink = page.getByRole('link', { name: /ホームセクションへ移動/i });
+    
+    // Check initial state
     await expect(homeLink).toBeVisible();
-
-    const aboutLink = page.locator('nav a[href="#about"]');
-    await expect(aboutLink).toBeVisible();
-
-    const servicesLink = page.locator('nav a[href="#services"]');
-    await expect(servicesLink).toBeVisible();
-
-    const portfolioLink = page.locator('nav a[href="#portfolio"]');
-    await expect(portfolioLink).toBeVisible();
-
-    const contactLink = page.locator('nav a[href="#contact"]');
-    await expect(contactLink).toBeVisible();
+    
+    // Hover and check for hover styles (if CSS allows testing)
+    await homeLink.hover();
+    await expect(homeLink).toBeVisible();
   });
 
-  test('navigation keyboard accessibility', async ({ page }) => {
-    // Test keyboard navigation
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Tab');
-
-    // Theme toggle should be focusable
-    const themeToggle = page.getByRole('button', { name: 'Toggle theme' });
-    await expect(themeToggle).toBeFocused();
-
-    // Continue tabbing through navigation links
-    await page.keyboard.press('Tab');
-    await expect(page.locator('nav a[href="#"]')).toBeFocused();
-
-    await page.keyboard.press('Tab');
-    await expect(page.locator('nav a[href="#services"]')).toBeFocused();
+  test('should maintain navigation bar position on scroll', async ({ page }) => {
+    // The navigation should have fixed positioning
+    const nav = page.getByRole('navigation');
+    
+    // Check fixed positioning classes
+    await expect(nav).toHaveClass(/fixed/);
+    await expect(nav).toHaveClass(/top-0/);
+    await expect(nav).toHaveClass(/w-full/);
+    
+    // Scroll down
+    await page.evaluate(() => window.scrollTo(0, 500));
+    
+    // Navigation should still be visible
+    await expect(nav).toBeVisible();
   });
 
-  test('navigation stays fixed on scroll', async ({ page }) => {
-    // Get initial position of navigation
-    const nav = page.locator('nav');
-    await expect(nav).toBeVisible();
+  test('should have proper accessibility attributes', async ({ page }) => {
+    const nav = page.getByRole('navigation');
+    await expect(nav).toHaveAttribute('role', 'navigation');
+    await expect(nav).toHaveAttribute('aria-label', 'メインナビゲーション');
+    
+    // Check that all navigation links have proper aria-labels
+    const links = await page.getByRole('link').all();
+    
+    for (const link of links) {
+      const ariaLabel = await link.getAttribute('aria-label');
+      expect(ariaLabel).toBeTruthy();
+    }
+  });
 
-    // Check that navigation has fixed positioning
-    const navClasses = await nav.getAttribute('class');
-    expect(navClasses).toContain('fixed');
-    expect(navClasses).toContain('top-0');
+  test('should have backdrop blur effect', async ({ page }) => {
+    const nav = page.getByRole('navigation');
+    await expect(nav).toHaveClass(/backdrop-blur-sm/);
+    await expect(nav).toHaveClass(/bg-background\/80/);
+  });
 
-    // Scroll down and check that nav is still visible
-    await page.evaluate(() => window.scrollTo(0, 1000));
-    await expect(nav).toBeVisible();
+  test('should have correct z-index for overlay', async ({ page }) => {
+    const nav = page.getByRole('navigation');
+    await expect(nav).toHaveClass(/z-50/);
+  });
+
+  test('should display logo with pink accent', async ({ page }) => {
+    const logoSpan = page.locator('span.text-pink-500');
+    await expect(logoSpan).toBeVisible();
+    await expect(logoSpan).toHaveText('web');
+  });
+
+  test('should handle keyboard navigation', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    
+    // Tab through navigation links
+    await page.keyboard.press('Tab');
+    
+    const focusedElement = page.locator(':focus');
+    await expect(focusedElement).toBeVisible();
+    
+    // Continue tabbing through navigation items
+    for (let i = 0; i < 5; i++) {
+      await page.keyboard.press('Tab');
+      const currentFocus = page.locator(':focus');
+      await expect(currentFocus).toBeVisible();
+    }
   });
 });

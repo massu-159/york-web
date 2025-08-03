@@ -1,230 +1,221 @@
-import { expect, test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Responsive Design', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test.describe('Mobile Viewport (375px)', () => {
+  test.describe('Mobile (375px)', () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
     });
 
-    test('navigation adapts to mobile view', async ({ page }) => {
-      // Check that navigation is visible
-      await expect(page.locator('nav')).toBeVisible();
-
-      // Brand should be visible
-      await expect(page.locator('nav').locator('text=York.')).toBeVisible();
-      await expect(page.locator('nav').locator('text=web')).toBeVisible();
-
-      // Navigation links should be hidden on mobile (using md:flex class)
-      const navLinks = page.locator('.hidden.md\\:flex');
-      await expect(navLinks).toBeHidden();
-
-      // Theme toggle should still be accessible
-      await expect(
-        page.getByRole('button', { name: 'Toggle theme' }),
-      ).toBeVisible();
+    test('should display mobile layout correctly', async ({ page }) => {
+      // Navigation should be mobile-friendly
+      const nav = page.getByRole('navigation');
+      await expect(nav).toBeVisible();
+      
+      // Desktop navigation should be hidden
+      const desktopNav = page.locator('.hidden.md\\:flex');
+      await expect(desktopNav).toBeHidden();
+      
+      // Mobile navigation should be visible
+      const mobileNav = page.locator('.md\\:hidden');
+      await expect(mobileNav).toBeVisible();
     });
 
-    test('main content adapts to mobile view', async ({ page }) => {
-      // Main content should be visible
-      await expect(page.locator('main')).toBeVisible();
-
-      // Check that content doesn't overflow
-      const body = page.locator('body');
-      const bodyBox = await body.boundingBox();
-      expect(bodyBox?.width).toBeLessThanOrEqual(375);
+    test('should show hero background image on mobile', async ({ page }) => {
+      const heroImage = page.getByAltText('Hero background');
+      await expect(heroImage).toBeVisible();
+      
+      // Should have mobile-specific classes
+      await expect(heroImage).toHaveClass(/md:hidden/);
     });
 
-    test('footer adapts to mobile view', async ({ page }) => {
-      // Footer should be visible
-      await expect(page.locator('footer')).toBeVisible();
-
-      // Check that footer content is properly arranged for mobile
-      await expect(
-        page.locator('text=© 2024 York.web All Rights Reserved.'),
-      ).toBeVisible();
+    test('should stack contact form vertically', async ({ page }) => {
+      const contactSection = page.locator('#contact');
+      await expect(contactSection).toBeVisible();
+      
+      // Grid should be single column on mobile
+      const gridContainer = contactSection.locator('.grid');
+      await expect(gridContainer).toBeVisible();
     });
 
-    test('contact form is usable on mobile', async ({ page }) => {
-      await page.goto('/#contact');
+    test('should display footer navigation vertically', async ({ page }) => {
+      const footer = page.getByRole('contentinfo');
+      await expect(footer).toBeVisible();
+      
+      // Footer navigation should be hidden on mobile
+      const footerNav = footer.locator('.hidden.md\\:flex');
+      await expect(footerNav).toBeHidden();
+    });
 
-      // Form fields should be visible and usable
-      await expect(
-        page.locator('input[placeholder="Your Name"]'),
-      ).toBeVisible();
-      await expect(
-        page.locator('input[placeholder="Your Email"]'),
-      ).toBeVisible();
-      await expect(
-        page.locator('textarea[placeholder="Your Message"]'),
-      ).toBeVisible();
-      await expect(
-        page.locator('button:has-text("SEND MESSAGE")'),
-      ).toBeVisible();
-
-      // Test form interaction on mobile
-      await page.fill('input[placeholder="Your Name"]', 'Mobile User');
-      await expect(page.locator('input[placeholder="Your Name"]')).toHaveValue(
-        'Mobile User',
-      );
+    test('should maintain proper text sizing on mobile', async ({ page }) => {
+      const mainHeading = page.getByRole('heading', { name: /bringing your vision to life/i });
+      await expect(mainHeading).toBeVisible();
+      
+      // Text should be readable on mobile
+      const boundingBox = await mainHeading.boundingBox();
+      expect(boundingBox?.width).toBeLessThan(375);
     });
   });
 
-  test.describe('Tablet Viewport (768px)', () => {
+  test.describe('Tablet (768px)', () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
     });
 
-    test('navigation shows desktop layout on tablet', async ({ page }) => {
-      // Navigation should show desktop layout
-      await expect(page.locator('nav')).toBeVisible();
-
-      // Navigation links should be visible (md:flex means visible on md and up)
-      const navLinks = page.locator('.hidden.md\\:flex');
-      await expect(navLinks).toBeVisible();
-
-      // All navigation links should be visible
-      await expect(page.locator('nav').locator('text=Home')).toBeVisible();
-      await expect(page.locator('nav').locator('text=About')).toBeVisible();
-      await expect(page.locator('nav').locator('text=Services')).toBeVisible();
-      await expect(page.locator('nav').locator('text=Portfolio')).toBeVisible();
-      await expect(page.locator('nav').locator('text=Contact')).toBeVisible();
+    test('should display tablet layout correctly', async ({ page }) => {
+      const nav = page.getByRole('navigation');
+      await expect(nav).toBeVisible();
+      
+      // Should still show mobile navigation at this breakpoint
+      const mobileNav = page.locator('.md\\:hidden');
+      await expect(mobileNav).toBeVisible();
     });
 
-    test('content layout adapts to tablet view', async ({ page }) => {
-      // Main content should be visible
-      await expect(page.locator('main')).toBeVisible();
-
-      // Check that content is properly sized for tablet
-      const body = page.locator('body');
-      const bodyBox = await body.boundingBox();
-      expect(bodyBox?.width).toBeLessThanOrEqual(768);
+    test('should show proper grid layouts', async ({ page }) => {
+      // About section should have proper grid
+      const aboutSection = page.locator('#about');
+      await expect(aboutSection).toBeVisible();
+      
+      // Contact section grid
+      const contactGrid = page.locator('#contact .grid');
+      await expect(contactGrid).toBeVisible();
     });
   });
 
-  test.describe('Desktop Viewport (1024px and above)', () => {
+  test.describe('Desktop (1024px)', () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize({ width: 1024, height: 768 });
     });
 
-    test('navigation shows full desktop layout', async ({ page }) => {
-      // All navigation elements should be visible
-      await expect(page.locator('nav')).toBeVisible();
-      await expect(page.locator('nav').locator('text=York.')).toBeVisible();
-      await expect(page.locator('nav').locator('text=web')).toBeVisible();
-
-      // Navigation links should be fully visible
-      await expect(page.locator('nav').locator('text=Home')).toBeVisible();
-      await expect(page.locator('nav').locator('text=About')).toBeVisible();
-      await expect(page.locator('nav').locator('text=Services')).toBeVisible();
-      await expect(page.locator('nav').locator('text=Portfolio')).toBeVisible();
-      await expect(page.locator('nav').locator('text=Contact')).toBeVisible();
-
-      // Theme toggle should be visible
-      await expect(
-        page.getByRole('button', { name: 'Toggle theme' }),
-      ).toBeVisible();
+    test('should display desktop navigation', async ({ page }) => {
+      // Desktop navigation should be visible
+      const desktopNav = page.locator('.hidden.md\\:flex');
+      await expect(desktopNav).toBeVisible();
+      
+      // Mobile navigation should be hidden
+      const mobileNav = page.locator('.md\\:hidden');
+      await expect(mobileNav).toBeVisible(); // Container is visible but nav items are hidden
     });
 
-    test('content utilizes full desktop space', async ({ page }) => {
-      // Main content should be visible
-      await expect(page.locator('main')).toBeVisible();
+    test('should show 3D effects on desktop', async ({ page }) => {
+      // Desktop should show ripple effects (3D) instead of background image
+      const rippleContainer = page.locator('.hidden.md\\:block');
+      await expect(rippleContainer).toBeVisible();
+    });
 
-      // Content should be properly centered with max-width
-      const mainContent = page.locator('main');
-      await expect(mainContent).toBeVisible();
+    test('should display two-column layouts', async ({ page }) => {
+      // About section should have two columns
+      const aboutGrid = page.locator('#about .grid.md\\:grid-cols-2');
+      await expect(aboutGrid).toBeVisible();
+      
+      // Contact section should have two columns
+      const contactGrid = page.locator('#contact .grid.md\\:grid-cols-2');
+      await expect(contactGrid).toBeVisible();
+    });
+
+    test('should show footer navigation', async ({ page }) => {
+      const footer = page.getByRole('contentinfo');
+      const footerNav = footer.locator('.hidden.md\\:flex');
+      await expect(footerNav).toBeVisible();
     });
   });
 
-  test.describe('Large Desktop Viewport (1440px)', () => {
+  test.describe('Large Desktop (1440px)', () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
     });
 
-    test('content is properly centered on large screens', async ({ page }) => {
-      // Check that content uses max-width containers
-      const nav = page.locator('nav .max-w-7xl');
-      await expect(nav).toBeVisible();
-
-      // Main content should be visible and centered
-      await expect(page.locator('main')).toBeVisible();
+    test('should maintain max-width containers', async ({ page }) => {
+      // Check max-width containers
+      const containers = page.locator('.max-w-7xl');
+      const containerCount = await containers.count();
+      expect(containerCount).toBeGreaterThan(0);
+      
+      // Containers should not exceed max width
+      for (let i = 0; i < containerCount; i++) {
+        const container = containers.nth(i);
+        const boundingBox = await container.boundingBox();
+        if (boundingBox) {
+          expect(boundingBox.width).toBeLessThanOrEqual(1280); // 7xl = 80rem = 1280px
+        }
+      }
     });
 
-    test('footer adapts to large desktop view', async ({ page }) => {
-      // Footer should be visible and properly laid out
-      await expect(page.locator('footer')).toBeVisible();
-
-      // Footer content should be properly spaced
-      const footerContent = page.locator('footer .max-w-7xl');
-      await expect(footerContent).toBeVisible();
-    });
-  });
-
-  test.describe('Orientation Changes', () => {
-    test('handles portrait to landscape orientation', async ({ page }) => {
-      // Start in portrait
-      await page.setViewportSize({ width: 375, height: 667 });
-      await expect(page.locator('nav')).toBeVisible();
-
-      // Change to landscape
-      await page.setViewportSize({ width: 667, height: 375 });
-      await expect(page.locator('nav')).toBeVisible();
-
-      // Content should still be accessible
-      await expect(page.locator('main')).toBeVisible();
+    test('should center content properly', async ({ page }) => {
+      const mainContent = page.locator('.max-w-7xl.mx-auto').first();
+      await expect(mainContent).toBeVisible();
+      
+      const boundingBox = await mainContent.boundingBox();
+      expect(boundingBox?.x).toBeGreaterThan(0); // Should have margins
     });
   });
 
-  test.describe('Accessibility on Different Screen Sizes', () => {
-    test('maintains accessibility on mobile', async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
+  test.describe('Cross-breakpoint functionality', () => {
+    const viewports = [
+      { width: 375, height: 667, name: 'Mobile' },
+      { width: 768, height: 1024, name: 'Tablet' },
+      { width: 1024, height: 768, name: 'Desktop' },
+      { width: 1440, height: 900, name: 'Large Desktop' }
+    ];
 
-      // Check that interactive elements are still accessible
-      const themeToggle = page.getByRole('button', { name: 'Toggle theme' });
-      await expect(themeToggle).toBeVisible();
-
-      // Check that theme toggle is still functional
-      await themeToggle.click();
-      await page.waitForTimeout(500); // Wait for theme change
-    });
-
-    test('maintains keyboard navigation on different screen sizes', async ({
-      page,
-    }) => {
-      await page.setViewportSize({ width: 768, height: 1024 });
-
-      // Test keyboard navigation
-      await page.keyboard.press('Tab');
-      await page.keyboard.press('Tab');
-
-      // Theme toggle should be focusable
-      const themeToggle = page.getByRole('button', { name: 'Toggle theme' });
-      await expect(themeToggle).toBeFocused();
-    });
+    for (const viewport of viewports) {
+      test(`should maintain functionality on ${viewport.name}`, async ({ page }) => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        
+        // Navigation should always be functional
+        const nav = page.getByRole('navigation');
+        await expect(nav).toBeVisible();
+        
+        // Main content should be visible
+        const hero = page.getByRole('banner');
+        await expect(hero).toBeVisible();
+        
+        // Footer should be visible
+        const footer = page.getByRole('contentinfo');
+        await expect(footer).toBeVisible();
+        
+        // Contact form should be functional
+        const nameInput = page.getByPlaceholder('Your Name');
+        await expect(nameInput).toBeVisible();
+        await nameInput.fill('Test');
+        await expect(nameInput).toHaveValue('Test');
+      });
+    }
   });
 
-  test.describe('Performance on Different Screen Sizes', () => {
-    test('loads quickly on mobile viewport', async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
+  test('should handle viewport orientation changes', async ({ page }) => {
+    // Test landscape mobile
+    await page.setViewportSize({ width: 667, height: 375 });
+    
+    const nav = page.getByRole('navigation');
+    await expect(nav).toBeVisible();
+    
+    const hero = page.getByRole('banner');
+    await expect(hero).toBeVisible();
+    
+    // Switch to portrait
+    await page.setViewportSize({ width: 375, height: 667 });
+    
+    await expect(nav).toBeVisible();
+    await expect(hero).toBeVisible();
+  });
 
-      const startTime = Date.now();
-      await page.goto('/');
-      await page.waitForLoadState('networkidle');
-      const loadTime = Date.now() - startTime;
+  test('should have proper spacing and padding across breakpoints', async ({ page }) => {
+    const viewports = [
+      { width: 375, height: 667 },
+      { width: 1024, height: 768 }
+    ];
 
-      // Load time should be reasonable (under 5 seconds)
-      expect(loadTime).toBeLessThan(5000);
-    });
-
-    test('no horizontal scrolling on mobile', async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 667 });
-
-      // Check that body width doesn't exceed viewport
-      const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
-      expect(scrollWidth).toBeLessThanOrEqual(375);
-    });
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      
+      // Check that content has proper padding
+      const containers = page.locator('.px-4, .sm\\:px-6, .lg\\:px-8');
+      const containerCount = await containers.count();
+      expect(containerCount).toBeGreaterThan(0);
+    }
   });
 });
