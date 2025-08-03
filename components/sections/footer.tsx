@@ -8,7 +8,7 @@ export function Footer() {
           <div className='text-xl font-semibold mb-4 md:mb-0'>
             York.<span className='text-pink-500'>web</span>
           </div>
-          <div className='flex space-x-8'>
+          <div className='space-x-8 hidden md:flex'>
             <Link href='#' className='text-foreground hover:text-foreground/80'>
               Home
             </Link>
