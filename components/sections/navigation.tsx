@@ -11,6 +11,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from '@/components/ui/sheet';
+import { Button } from '../ui/button';
 
 export function Navigation() {
   const navItems = [
@@ -67,13 +68,9 @@ export function Navigation() {
           <div className='md:hidden'>
             <Sheet>
               <SheetTrigger asChild>
-                <button
-                  className='inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-foreground/80 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2'
-                  aria-label='メニューを開く'
-                  type='button'
-                >
+                <Button variant="ghost">
                   <Menu className='h-6 w-6' />
-                </button>
+                </Button>
               </SheetTrigger>
               <SheetContent side='right' className='w-[300px]'>
                 <SheetHeader>
