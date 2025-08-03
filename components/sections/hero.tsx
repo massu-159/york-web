@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -25,7 +25,6 @@ export function Hero() {
         setTimeout(() => {
           setShowRipple(true);
         }, 100);
-
       } catch (error) {
         console.error('Failed to load Ripple component:', error);
         setHasError(true);
@@ -80,19 +79,21 @@ export function Hero() {
       aria-label='メインビジュアル'
     >
       <div className='absolute inset-0 z-10'>
-        <Image
-          src='/images/hero-bg.jpg'
-          alt='Hero background'
-          fill
-          className='w-full h-full object-cover md:hidden'
-          priority
-          style={{
-            transform: 'translateZ(0)',
-            backfaceVisibility: 'hidden',
-            perspective: '1000px',
-            willChange: 'transform',
-          }}
-        />
+        <Suspense fallback={<LoadingFallback />}>
+          <Image
+            src='/images/hero-bg.jpg'
+            alt='Hero background'
+            fill
+            className='w-full h-full object-cover md:hidden'
+            priority
+            style={{
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              perspective: '1000px',
+              willChange: 'transform',
+            }}
+          />
+        </Suspense>
         <div className='absolute inset-0 hidden md:block h-full'>
           {renderRippleContent()}
         </div>

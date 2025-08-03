@@ -85,9 +85,9 @@ export function Services() {
                   hover:before:opacity-100"
               >
                 <div
-                  className='w-16 h-16 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center mb-4 
+                  className='w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4 
                   [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] transition-all duration-500
-                  group-hover:bg-pink-400 dark:group-hover:bg-pink-600'
+                  group-hover:bg-pink-400'
                 >
                   <div className=''>{service.icon}</div>
                 </div>
