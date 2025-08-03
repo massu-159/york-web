@@ -1,4 +1,17 @@
+'use client';
+
 import Link from 'next/link';
+import { Menu } from 'lucide-react';
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
+import { Button } from '../ui/button';
 
 export function Navigation() {
   const navItems = [
@@ -49,6 +62,37 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
+          </div>
+          
+          {/* Mobile Navigation */}
+          <div className='md:hidden'>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost">
+                  <Menu className='h-6 w-6' />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side='right' className='w-[300px]'>
+                <SheetHeader>
+                  <SheetTitle className='text-left'>
+                    York.<span className='text-pink-500'>web</span>
+                  </SheetTitle>
+                </SheetHeader>
+                <nav className='flex flex-col space-y-4 mt-8'>
+                  {navItems.map((item) => (
+                    <SheetClose asChild key={item.href}>
+                      <Link
+                        href={item.href}
+                        className='text-foreground hover:text-pink-500 text-lg py-2 px-4 rounded-md transition-colors'
+                        aria-label={item.ariaLabel}
+                      >
+                        {item.label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
