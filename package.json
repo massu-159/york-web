@@ -43,7 +43,7 @@
     "react-hook-form": "^7.62.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss": "3.3.3",
-    "three": "^0.162.0",
+    "three": "^0.179.1",
     "typescript": "5.2.2",
     "zod": "^3.23.8"
   },
