@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { ABOUT_TEXTS } from '@/lib/constants/texts';
 
 export function About() {
   return (
@@ -17,28 +18,25 @@ export function About() {
             />
           </div>
           <div>
-            <span className='text-pink-500'>About Our Studio</span>
+            <span className='text-pink-500'>{ABOUT_TEXTS.SECTION_LABEL}</span>
             <h2 className='text-3xl font-bold mt-2 mb-6'>
-              We Create Digital Experiences
+              {ABOUT_TEXTS.TITLE}
             </h2>
             <p className='text-muted-foreground mb-6'>
-              Founded in 2015, York.web has been at the forefront of web design
-              innovation, helping businesses establish a strong online presence
-              through creative solutions that deliver beautiful but fast-drive
-              results.
+              {ABOUT_TEXTS.DESCRIPTION}
             </p>
-            <div className='grid grid-cols-3 gap-8 text-center'>
+            <div className='grid grid-cols-2 md:grid-cols-3 gap-8 text-center'>
               <div className='p-4 rounded-lg transition-all duration-300 hover:translate-y-2 shadow-lg shadow-pink-500/20 hover:shadow-none'>
-                <h3 className='text-3xl font-bold text-pink-500'>250+</h3>
-                <p className='text-muted-foreground'>Happy Clients</p>
+                <p className='text-muted-foreground'>{ABOUT_TEXTS.INFO_LABEL.COMPANY}</p>
+                <h3 className='font-bold'>York.<span className='text-pink-500'>web</span></h3>
               </div>
               <div className='p-4 rounded-lg transition-all duration-300 hover:translate-y-2 shadow-lg shadow-pink-500/20 hover:shadow-none'>
-                <h3 className='text-3xl font-bold text-pink-500'>120+</h3>
-                <p className='text-muted-foreground'>Projects</p>
+                <p className='text-muted-foreground'>{ABOUT_TEXTS.INFO_LABEL.NAME}</p>
+                <h3>{ABOUT_TEXTS.INFO_VALUE.NAME}</h3>
               </div>
-              <div className='p-4 rounded-lg transition-all duration-300 hover:translate-y-2 shadow-lg shadow-pink-500/20 hover:shadow-none'>
-                <h3 className='text-3xl font-bold text-pink-500'>8</h3>
-                <p className='text-muted-foreground'>Years Experience</p>
+              <div className='p-4 rounded-lg transition-all duration-300 hover:translate-y-2 shadow-lg shadow-pink-500/20 hover:shadow-none col-span-2 md:col-span-1'>
+                <p className='text-muted-foreground'>{ABOUT_TEXTS.INFO_LABEL.BUSINESS}</p>
+                <h3 className=''>{ABOUT_TEXTS.INFO_VALUE.BUSINESS}</h3>
               </div>
             </div>
           </div>

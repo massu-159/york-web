@@ -12,25 +12,26 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
+import { NAVIGATION_TEXTS, ARIA_LABELS } from '@/lib/constants/texts';
 
 export function Navigation() {
   const navItems = [
-    { href: '#', label: 'Home', ariaLabel: 'ホームセクションへ移動' },
+    { href: '#', label: NAVIGATION_TEXTS.HOME, ariaLabel: ARIA_LABELS.NAVIGATION_ITEMS.HOME },
     {
       href: '#services',
-      label: 'Services',
-      ariaLabel: 'サービスセクションへ移動',
+      label: NAVIGATION_TEXTS.SERVICES,
+      ariaLabel: ARIA_LABELS.NAVIGATION_ITEMS.SERVICES,
     },
     {
       href: '#portfolio',
-      label: 'Portfolio',
-      ariaLabel: 'ポートフォリオセクションへ移動',
+      label: NAVIGATION_TEXTS.PORTFOLIO,
+      ariaLabel: ARIA_LABELS.NAVIGATION_ITEMS.PORTFOLIO,
     },
-    { href: '#about', label: 'About', ariaLabel: '会社概要セクションへ移動' },
+    { href: '#about', label: NAVIGATION_TEXTS.ABOUT, ariaLabel: ARIA_LABELS.NAVIGATION_ITEMS.ABOUT },
     {
       href: '#contact',
-      label: 'Contact',
-      ariaLabel: 'お問い合わせセクションへ移動',
+      label: NAVIGATION_TEXTS.CONTACT,
+      ariaLabel: ARIA_LABELS.NAVIGATION_ITEMS.CONTACT,
     },
   ];
 
@@ -38,7 +39,7 @@ export function Navigation() {
     <nav
       className='fixed top-0 w-full bg-background/80 backdrop-blur-sm z-50 border-b'
       role='navigation'
-      aria-label='メインナビゲーション'
+      aria-label={ARIA_LABELS.MAIN_NAVIGATION}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
@@ -46,7 +47,7 @@ export function Navigation() {
             <Link
               href='#'
               className='text-xl font-semibold'
-              aria-label='ホームページへ戻る'
+              aria-label={ARIA_LABELS.HOME_LINK}
             >
               York.<span className='text-pink-500'>web</span>
             </Link>

@@ -8,55 +8,50 @@ import {
   Smartphone,
   Wrench,
 } from 'lucide-react';
+import { SERVICES_TEXTS } from '@/lib/constants/texts';
 
 const services = [
   {
     icon: (
       <Layout className='w-6 h-6 text-pink-500 group-hover:text-white transition-colors duration-500' />
     ),
-    title: 'Web Design',
-    description:
-      'We create stunning websites with intuitive interfaces that engage and delight users with purposeful user experiences.',
+    title: SERVICES_TEXTS.SERVICES.AI_INTRODUCTION.TITLE,
+    description: SERVICES_TEXTS.SERVICES.AI_INTRODUCTION.DESCRIPTION,
   },
   {
     icon: (
       <Code className='w-6 h-6 text-pink-500 group-hover:text-white transition-colors duration-500' />
     ),
-    title: 'Web Development',
-    description:
-      'We develop high-performance web applications using modern technologies to ensure reliability, security, and scalability.',
+    title: SERVICES_TEXTS.SERVICES.WEB_DEVELOPMENT.TITLE,
+    description: SERVICES_TEXTS.SERVICES.WEB_DEVELOPMENT.DESCRIPTION,
   },
   {
     icon: (
       <Smartphone className='w-6 h-6 text-pink-500 group-hover:text-white transition-colors duration-500' />
     ),
-    title: 'Responsive Design',
-    description:
-      'We ensure responsive web design that functions beautifully across all devices and screen sizes.',
+    title: SERVICES_TEXTS.SERVICES.RESPONSIVE_DESIGN.TITLE,
+    description: SERVICES_TEXTS.SERVICES.RESPONSIVE_DESIGN.DESCRIPTION,
   },
   {
     icon: (
       <ArrowRight className='w-6 h-6 text-pink-500 group-hover:text-white transition-colors duration-500' />
     ),
-    title: 'SEO Optimization',
-    description:
-      'We optimize your business visibility through expert digital optimization strategies and analytics.',
+    title: SERVICES_TEXTS.SERVICES.SEO_OPTIMIZATION.TITLE,
+    description: SERVICES_TEXTS.SERVICES.SEO_OPTIMIZATION.DESCRIPTION,
   },
   {
     icon: (
       <ShoppingCart className='w-6 h-6 text-pink-500 group-hover:text-white transition-colors duration-500' />
     ),
-    title: 'E-Commerce Development',
-    description:
-      'We build secure and user-friendly e-commerce sites that provide seamless shopping experiences.',
+    title: SERVICES_TEXTS.SERVICES.APP_DEVELOPMENT.TITLE,
+    description: SERVICES_TEXTS.SERVICES.APP_DEVELOPMENT.DESCRIPTION,
   },
   {
     icon: (
       <Wrench className='w-6 h-6 text-pink-500 group-hover:text-white transition-colors duration-500' />
     ),
-    title: 'Maintenance & Support',
-    description:
-      'We support continuous improvement and stable operation of your websites through expert maintenance.',
+    title: SERVICES_TEXTS.SERVICES.MAINTENANCE.TITLE,
+    description: SERVICES_TEXTS.SERVICES.MAINTENANCE.DESCRIPTION,
   },
 ];
 
@@ -67,10 +62,9 @@ export function Services() {
       <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -left-60 animate-ripple opacity-0 [animation-delay:2s]'></div>
       <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -left-60 animate-ripple opacity-0 [animation-delay:4s]'></div>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <h2 className='text-3xl font-bold text-center mb-2'>Our Services</h2>
+        <h2 className='text-3xl font-bold text-center mb-2'>{SERVICES_TEXTS.TITLE}</h2>
         <p className='text-muted-foreground text-center mb-12'>
-          We provide refined web solutions tailored to your specific needs,
-          ensuring your digital presence stands out from the competition.
+          {SERVICES_TEXTS.SUBTITLE}
         </p>
         <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {services.map((service, index) => (
