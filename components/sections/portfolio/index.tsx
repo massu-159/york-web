@@ -3,6 +3,7 @@ import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 
 import { client } from '@/lib/microcms';
+import { PORTFOLIO_TEXTS } from '@/lib/constants/texts';
 
 import NoPortfolio from './no-portfolio';
 
@@ -24,10 +25,9 @@ export async function Portfolio() {
       <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple opacity-0 [animation-delay:2s]'></div>
       <div className='absolute w-96 h-96 bg-pink-500/10 rounded-full -top-60 -right-60 animate-ripple opacity-0 [animation-delay:4s]'></div>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <h2 className='text-3xl font-bold text-center mb-2'>Our Portfolio</h2>
+        <h2 className='text-3xl font-bold text-center mb-2'>{PORTFOLIO_TEXTS.TITLE}</h2>
         <p className='text-muted-foreground text-center mb-12'>
-          Showcasing our groundbreaking for clients across various industries,
-          delivering exceptional digital solutions.
+          {PORTFOLIO_TEXTS.SUBTITLE}
         </p>
         <div
           className={`grid gap-8 ${portfolioItems.length == 0 ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'}`}

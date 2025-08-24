@@ -12,9 +12,9 @@ test.describe('Contact Form', () => {
     await expect(contactForm).toBeVisible();
     
     // Check form fields
-    const nameInput = page.getByPlaceholder('Your Name');
-    const emailInput = page.getByPlaceholder('Your Email');
-    const messageTextarea = page.getByPlaceholder('Your Message');
+    const nameInput = page.getByPlaceholder('お名前');
+    const emailInput = page.getByPlaceholder('メールアドレス');
+    const messageTextarea = page.getByPlaceholder('お問い合わせ内容');
     const submitButton = page.getByRole('button', { name: /send message/i });
     
     await expect(nameInput).toBeVisible();
@@ -24,23 +24,23 @@ test.describe('Contact Form', () => {
   });
 
   test('should display contact information', async ({ page }) => {
-    await expect(page.getByText('Contact Information')).toBeVisible();
+    await expect(page.getByText('連絡先情報')).toBeVisible();
     
     // Check contact details
-    await expect(page.getByText('Our Location')).toBeVisible();
-    await expect(page.getByText('123 Creative St, Digital Valley, NY')).toBeVisible();
+    await expect(page.getByText('オフィス所在地')).toBeVisible();
+    await expect(page.getByText('東京都渋谷区デジタル 1-2-3')).toBeVisible();
     
-    await expect(page.getByText('Call Us')).toBeVisible();
-    await expect(page.getByText('+1 234 5678')).toBeVisible();
+    await expect(page.getByText('お電話')).toBeVisible();
+    await expect(page.getByText('+81 3-1234-5678')).toBeVisible();
     
-    await expect(page.getByText('Email Us')).toBeVisible();
+    await expect(page.getByText('メール', { exact: false }).first()).toBeVisible();
     await expect(page.getByText('hello@yorkweb.com')).toBeVisible();
   });
 
   test('should allow typing in form fields', async ({ page }) => {
-    const nameInput = page.getByPlaceholder('Your Name');
-    const emailInput = page.getByPlaceholder('Your Email');
-    const messageTextarea = page.getByPlaceholder('Your Message');
+    const nameInput = page.getByPlaceholder('お名前');
+    const emailInput = page.getByPlaceholder('メールアドレス');
+    const messageTextarea = page.getByPlaceholder('お問い合わせ内容');
     
     await nameInput.fill('John Doe');
     await emailInput.fill('john.doe@example.com');
@@ -52,9 +52,9 @@ test.describe('Contact Form', () => {
   });
 
   test('should submit form successfully', async ({ page }) => {
-    const nameInput = page.getByPlaceholder('Your Name');
-    const emailInput = page.getByPlaceholder('Your Email');
-    const messageTextarea = page.getByPlaceholder('Your Message');
+    const nameInput = page.getByPlaceholder('お名前');
+    const emailInput = page.getByPlaceholder('メールアドレス');
+    const messageTextarea = page.getByPlaceholder('お問い合わせ内容');
     const submitButton = page.getByRole('button', { name: /send message/i });
     
     // Fill out the form
@@ -70,9 +70,9 @@ test.describe('Contact Form', () => {
   });
 
   test('should have proper form field attributes', async ({ page }) => {
-    const nameInput = page.getByPlaceholder('Your Name');
-    const emailInput = page.getByPlaceholder('Your Email');
-    const messageTextarea = page.getByPlaceholder('Your Message');
+    const nameInput = page.getByPlaceholder('お名前');
+    const emailInput = page.getByPlaceholder('メールアドレス');
+    const messageTextarea = page.getByPlaceholder('お問い合わせ内容');
     
     // Check input types
     await expect(nameInput).toHaveAttribute('type', 'text');
@@ -101,13 +101,13 @@ test.describe('Contact Form', () => {
     
     await expect(nameLabel).toHaveText('お名前');
     await expect(emailLabel).toHaveText('メールアドレス');
-    await expect(messageLabel).toHaveText('メッセージ');
+    await expect(messageLabel).toHaveText('お問い合わせ内容');
   });
 
   test('should focus on form fields correctly', async ({ page }) => {
-    const nameInput = page.getByPlaceholder('Your Name');
-    const emailInput = page.getByPlaceholder('Your Email');
-    const messageTextarea = page.getByPlaceholder('Your Message');
+    const nameInput = page.getByPlaceholder('お名前');
+    const emailInput = page.getByPlaceholder('メールアドレス');
+    const messageTextarea = page.getByPlaceholder('お問い合わせ内容');
     
     // Focus on name input
     await nameInput.focus();
@@ -149,11 +149,11 @@ test.describe('Contact Form', () => {
   });
 
   test('should display section heading and description', async ({ page }) => {
-    const heading = page.getByRole('heading', { name: /get in touch/i });
+    const heading = page.getByRole('heading', { name: /お問い合わせ/i });
     await expect(heading).toBeVisible();
     await expect(heading).toHaveAttribute('id', 'contact-heading');
     
-    const description = page.getByText(/For project consultations and quote requests/);
+    const description = page.getByText(/プロジェクトのご相談やお見積もり/);
     await expect(description).toBeVisible();
   });
 

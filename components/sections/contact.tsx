@@ -3,6 +3,7 @@
 import { Mail, MapPin, Phone } from 'lucide-react';
 
 import { FormEvent, useState } from 'react';
+import { CONTACT_TEXTS, ARIA_LABELS } from '@/lib/constants/texts';
 
 export function Contact() {
   const [formStatus, setFormStatus] = useState<
@@ -33,64 +34,12 @@ export function Contact() {
           id='contact-heading'
           className='text-3xl font-bold text-center mb-2'
         >
-          Get In Touch
+          {CONTACT_TEXTS.TITLE}
         </h2>
         <p className='text-muted-foreground text-center mb-12'>
-          For project consultations and quote requests, please contact us here.
-          We'll be happy to discuss your digital needs.
+          {CONTACT_TEXTS.SUBTITLE}
         </p>
-        <div className='grid md:grid-cols-2 gap-12'>
-          <div>
-            <h3
-              className='text-xl font-semibold mb-6'
-              id='contact-info-heading'
-            >
-              Contact Information
-            </h3>
-            <div className='space-y-4'>
-              <div className='flex items-center space-x-4 group'>
-                <div
-                  className='w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center 
-                  [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] transition-all duration-500
-                  group-hover:bg-pink-400'
-                >
-                  <MapPin className='w-5 h-5 text-pink-500 group-hover:text-white transition-colors duration-500' />
-                </div>
-                <div>
-                  <p className='font-medium'>Our Location</p>
-                  <p className='text-muted-foreground'>
-                    123 Creative St, Digital Valley, NY
-                  </p>
-                </div>
-              </div>
-              <div className='flex items-center space-x-4 group'>
-                <div
-                  className='w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center 
-                  [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] transition-all duration-500
-                  group-hover:bg-pink-400'
-                >
-                  <Phone className='w-5 h-5 text-pink-500 group-hover:text-white transition-colors duration-500' />
-                </div>
-                <div>
-                  <p className='font-medium'>Call Us</p>
-                  <p className='text-muted-foreground'>+1 234 5678</p>
-                </div>
-              </div>
-              <div className='flex items-center space-x-4 group'>
-                <div
-                  className='w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center 
-                  [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] transition-all duration-500
-                  group-hover:bg-pink-400'
-                >
-                  <Mail className='w-5 h-5 text-pink-500 group-hover:text-white transition-colors duration-500' />
-                </div>
-                <div>
-                  <p className='font-medium'>Email Us</p>
-                  <p className='text-muted-foreground'>hello@yorkweb.com</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className='max-w-2xl mx-auto'>
           <form
             className='space-y-6'
             role='form'
@@ -99,58 +48,58 @@ export function Contact() {
           >
             <div>
               <label htmlFor='contact-name' className='sr-only'>
-                お名前
+                {CONTACT_TEXTS.FORM.NAME_PLACEHOLDER}
               </label>
               <input
                 id='contact-name'
                 type='text'
-                placeholder='Your Name'
+                placeholder={CONTACT_TEXTS.FORM.NAME_PLACEHOLDER}
                 className='w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-pink-500'
                 aria-required='true'
                 aria-describedby='name-description'
               />
               <span id='name-description' className='sr-only'>
-                お名前を入力してください
+                {ARIA_LABELS.FORM.NAME_DESCRIPTION}
               </span>
             </div>
             <div>
               <label htmlFor='contact-email' className='sr-only'>
-                メールアドレス
+                {CONTACT_TEXTS.FORM.EMAIL_PLACEHOLDER}
               </label>
               <input
                 id='contact-email'
                 type='email'
-                placeholder='Your Email'
+                placeholder={CONTACT_TEXTS.FORM.EMAIL_PLACEHOLDER}
                 className='w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-pink-500'
                 aria-required='true'
                 aria-describedby='email-description'
               />
               <span id='email-description' className='sr-only'>
-                メールアドレスを入力してください
+                {ARIA_LABELS.FORM.EMAIL_DESCRIPTION}
               </span>
             </div>
             <div>
               <label htmlFor='contact-message' className='sr-only'>
-                メッセージ
+                {CONTACT_TEXTS.FORM.MESSAGE_PLACEHOLDER}
               </label>
               <textarea
                 id='contact-message'
-                placeholder='Your Message'
+                placeholder={CONTACT_TEXTS.FORM.MESSAGE_PLACEHOLDER}
                 rows={4}
                 className='w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-pink-500'
                 aria-required='true'
                 aria-describedby='message-description'
               ></textarea>
               <span id='message-description' className='sr-only'>
-                メッセージ内容を入力してください
+                {ARIA_LABELS.FORM.MESSAGE_DESCRIPTION}
               </span>
             </div>
             <button
               type='submit'
               className='bg-pink-600 text-white px-8 py-3 rounded-full hover:bg-pink-700 transition-colors w-full'
-              aria-label='メッセージを送信する'
+              aria-label={ARIA_LABELS.SUBMIT_MESSAGE}
             >
-              SEND MESSAGE
+              {CONTACT_TEXTS.FORM.SUBMIT_BUTTON}
             </button>
           </form>
         </div>

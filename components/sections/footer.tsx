@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NAVIGATION_TEXTS, FOOTER_TEXTS } from '@/lib/constants/texts';
 
 export function Footer() {
   return (
@@ -10,36 +11,36 @@ export function Footer() {
           </div>
           <div className='space-x-8 hidden md:flex'>
             <Link href='#' className='text-foreground hover:text-foreground/80'>
-              Home
+              {NAVIGATION_TEXTS.HOME}
             </Link>
             <Link
               href='#services'
               className='text-foreground hover:text-foreground/80'
             >
-              Services
+              {NAVIGATION_TEXTS.SERVICES}
             </Link>
             <Link
               href='#portfolio'
               className='text-foreground hover:text-foreground/80'
             >
-              Portfolio
+              {NAVIGATION_TEXTS.PORTFOLIO}
             </Link>
             <Link
               href='#about'
               className='text-foreground hover:text-foreground/80'
             >
-              About
+              {NAVIGATION_TEXTS.ABOUT}
             </Link>
             <Link
               href='#contact'
               className='text-foreground hover:text-foreground/80'
             >
-              Contact
+              {NAVIGATION_TEXTS.CONTACT}
             </Link>
           </div>
         </div>
         <div className='text-center text-muted-foreground mt-8'>
-          © 2024 York.web All Rights Reserved.
+          {FOOTER_TEXTS.COPYRIGHT}
         </div>
       </div>
     </footer>
