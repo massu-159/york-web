@@ -6,7 +6,7 @@ test.describe('Homepage', () => {
   });
 
   test('should load the homepage successfully', async ({ page }) => {
-    await expect(page).toHaveTitle(/nextjs/i);
+    await expect(page).toHaveTitle('York.web - Creative Web Solutions');
     await expect(page.locator('body')).toBeVisible();
   });
 

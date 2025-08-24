@@ -10,6 +10,7 @@ import {
   FormDescription,
   FormMessage,
 } from '../form';
+import { useEffect } from 'react';
 
 // Test component that uses the form components
 function TestFormComponent() {
@@ -52,7 +53,7 @@ function TestFormWithError() {
   });
 
   // Use useEffect to set error after component mounts to avoid infinite re-renders
-  React.useEffect(() => {
+  useEffect(() => {
     form.setError('email', {
       type: 'manual',
       message: 'Email is required',

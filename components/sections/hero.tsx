@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { ComponentType, Suspense, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -8,7 +8,7 @@ import { LoadingFallback } from '@/components/ui/loading-fallback';
 
 export function Hero() {
   const [RippleComponent, setRippleComponent] =
-    useState<React.ComponentType | null>(null);
+    useState<ComponentType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [showRipple, setShowRipple] = useState(false);
