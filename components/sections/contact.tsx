@@ -2,14 +2,14 @@
 
 import { Mail, MapPin, Phone } from 'lucide-react';
 
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 export function Contact() {
   const [formStatus, setFormStatus] = useState<
     'idle' | 'submitting' | 'success' | 'error'
   >('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setFormStatus('submitting');
 

@@ -1,14 +1,15 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Navigation } from '../navigation';
+import { ReactNode } from 'react';
 
 // Mock the Sheet component
 jest.mock('@/components/ui/sheet', () => ({
-  Sheet: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet">{children}</div>,
-  SheetContent: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet-content">{children}</div>,
-  SheetHeader: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet-header">{children}</div>,
-  SheetTitle: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet-title">{children}</div>,
-  SheetTrigger: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet-trigger">{children}</div>,
-  SheetClose: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet-close">{children}</div>,
+  Sheet: ({ children }: { children: ReactNode }) => <div data-testid="sheet">{children}</div>,
+  SheetContent: ({ children }: { children: ReactNode }) => <div data-testid="sheet-content">{children}</div>,
+  SheetHeader: ({ children }: { children: ReactNode }) => <div data-testid="sheet-header">{children}</div>,
+  SheetTitle: ({ children }: { children: ReactNode }) => <div data-testid="sheet-title">{children}</div>,
+  SheetTrigger: ({ children }: { children: ReactNode }) => <div data-testid="sheet-trigger">{children}</div>,
+  SheetClose: ({ children }: { children: ReactNode }) => <div data-testid="sheet-close">{children}</div>,
 }));
 
 describe('Navigation', () => {

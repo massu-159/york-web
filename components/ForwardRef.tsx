@@ -4,7 +4,7 @@ import { EffectComposer } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
 import * as THREE from 'three';
 
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 
 import OffScreenScene from './ripple/effects/OffScreenScene';
 import { RippleEffect } from './ripple/effects/Ripple';
