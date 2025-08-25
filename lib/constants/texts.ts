@@ -49,7 +49,7 @@ export const ARIA_LABELS = {
 
 export const ABOUT_TEXTS = {
   SECTION_LABEL: 'About',
-  TITLE: 'お客様と共に歩みます',
+  TITLE: 'デジタル変革をサポート',
   DESCRIPTION:
     'York.webはまだ創業まもないですが、複数のプロジェクトを経験しており、お客様のニーズに合わせた最適なソリューションを提供します。',
   INFO_LABEL: {
