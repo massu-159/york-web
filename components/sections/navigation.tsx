@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 
@@ -55,7 +53,7 @@ export function Navigation() {
           <div className='hidden md:flex items-center space-x-8'>
             {navItems.map((item, index) => (
               <Link
-                key={item.href}
+                key={index}
                 href={item.href}
                 className='text-foreground hover:text-foreground/80 rounded-md px-2 py-1'
                 aria-label={item.ariaLabel}

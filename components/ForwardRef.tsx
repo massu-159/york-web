@@ -15,10 +15,6 @@ const zoomCalcBox3 = new THREE.Box3();
 const mouseCenter = new THREE.Vector3(0.5, 0.5, 1.1);
 const res = new THREE.Vector2();
 
-interface Props {
-  [key: string]: any;
-}
-
 type Camera = {
   right: number;
   left: number;
@@ -42,28 +38,11 @@ function calculateOrthographicZoom(camera: Camera, object: Object3D): number {
   return Math.max(zoomX, zoomY);
 }
 
-function calculateDistanceToCamera(camera: Camera, object: Object3D): number {
-  const cameraPosition = vec3;
-  const objectPosition = vec3;
-
-  camera.getWorldPosition(cameraPosition);
-  object.getWorldPosition(objectPosition);
-
-  const distance = cameraPosition.distanceTo(objectPosition);
-
-  return distance;
-}
-
-export default forwardRef<THREE.Mesh, Props>(function Plane(
-  { ...props }: Props,
-  crocVectors: any,
-) {
-  const { size, gl, set, scene } = useThree();
+export default forwardRef<THREE.Mesh>(function Plane() {
+  const { size, set } = useThree();
   const offScreen = useRef<THREE.Mesh>(null);
   const composerRef = useRef<any>(null);
   const rippleShaderPassRef = useRef<Effect | null>(null);
-
-  // const planeRef = useRef()
 
   const [orthoZoom, setOrthoZoom] = useState<number>(1);
 
@@ -79,7 +58,7 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(
   res.y = size.height;
 
   useFrame(state => {
-    const { gl, clock, pointer } = state;
+    const { gl, clock } = state;
     gl.setRenderTarget(textureB);
     if (offScreenCameraRef.current) {
       gl.render(offScreenScene, offScreenCameraRef.current);
@@ -138,9 +117,6 @@ export default forwardRef<THREE.Mesh, Props>(function Plane(
             rippleUniforms.get('mouse')!.value.y = 0.5;
             rippleUniforms.get('mouse')!.value.z = 1.01;
           }
-          // rippleShaderPassRef.current.uniforms.get('mouse').value.x = 0.5
-          // rippleShaderPassRef.current.uniforms.get('mouse').value.y = 0.5
-          // rippleShaderPassRef.current.uniforms.get('mouse').value.z = 0.0
         }
       }
 
