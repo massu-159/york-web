@@ -39,8 +39,15 @@ export function Footer() {
             </Link>
           </div>
         </div>
-        <div className='text-center text-muted-foreground mt-8'>
-          {FOOTER_TEXTS.COPYRIGHT}
+        <div className='text-center text-muted-foreground mt-8 space-y-2'>
+          <div>
+            <Link href='/privacy' className='hover:text-foreground'>
+              {FOOTER_TEXTS.PRIVACY_POLICY}
+            </Link>
+          </div>
+          <div>
+            {FOOTER_TEXTS.COPYRIGHT}
+          </div>
         </div>
       </div>
     </footer>
