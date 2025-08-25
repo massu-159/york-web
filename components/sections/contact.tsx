@@ -1,7 +1,5 @@
 'use client';
 
-import { Mail, MapPin, Phone } from 'lucide-react';
-
 import { FormEvent, useState } from 'react';
 import { CONTACT_TEXTS, ARIA_LABELS } from '@/lib/constants/texts';
 

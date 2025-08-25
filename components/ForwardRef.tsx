@@ -4,7 +4,7 @@ import { EffectComposer } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
 import * as THREE from 'three';
 
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { ComponentRef, forwardRef, useEffect, useRef, useState } from 'react';
 
 import OffScreenScene from './ripple/effects/OffScreenScene';
 import { RippleEffect } from './ripple/effects/Ripple';
@@ -41,7 +41,7 @@ function calculateOrthographicZoom(camera: Camera, object: Object3D): number {
 export default forwardRef<THREE.Mesh>(function Plane() {
   const { size, set } = useThree();
   const offScreen = useRef<THREE.Mesh>(null);
-  const composerRef = useRef<any>(null);
+  const composerRef = useRef<ComponentRef<typeof EffectComposer>>(null);
   const rippleShaderPassRef = useRef<Effect | null>(null);
 
   const [orthoZoom, setOrthoZoom] = useState<number>(1);
