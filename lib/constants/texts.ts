@@ -113,6 +113,7 @@ export const PORTFOLIO_TEXTS = {
 
 export const FOOTER_TEXTS = {
   COPYRIGHT: '© 2024 York.web All Rights Reserved.',
+  PRIVACY_POLICY: 'プライバシーポリシー',
 } as const;
 
 export const ERROR_MESSAGES = {
